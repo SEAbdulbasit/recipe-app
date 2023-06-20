@@ -29,6 +29,6 @@ val recipesList = listOf(
         ),
         image = "assets/images/desserts/01-lemon-cheesecake.png",
         bgImageName = "01-lemon-cheesecake-bg",
-        bgColor = Color.Yellow,
+        bgColor = Color(0xffFFEF7D),
     )
 )
