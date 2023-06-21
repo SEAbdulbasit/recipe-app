@@ -35,7 +35,7 @@ expect fun getPlatformName(): String
 
 @Composable
 fun AnimatedListView() {
-    val items by remember { mutableStateOf(generateItems()) }
+    val items by remember { mutableStateOf(recipesList) }
 
     val listState = rememberLazyListState()
 
@@ -43,7 +43,7 @@ fun AnimatedListView() {
         items(items) { item ->
             RecipeListItemWrapper(
                 child = {
-                    RecipeListItem(recipesList.first())
+                    RecipeListItem(item)
                 },
                 scrollDirection = if (listState.isScrollingDown()) ScrollDirection.Backward else ScrollDirection.Forward
             )
