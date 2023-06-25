@@ -38,7 +38,7 @@ fun App() {
                         e.printStackTrace()
                     }
                 }
-                RecipeDetails(screen.recipe, screen.imageBitmap, chefImage.value)
+                RecipeDetails(screen.recipe, screen.imageBitmap, chefImage.value,width)
             }
 
             Screens.RecipesList -> RecipesListScreen(
