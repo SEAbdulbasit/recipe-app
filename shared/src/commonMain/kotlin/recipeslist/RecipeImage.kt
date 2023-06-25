@@ -22,10 +22,10 @@ fun RecipeImage(imageBitmap: ImageBitmap, modifier: Modifier) {
     Box(modifier = modifier) {
         Box(
             modifier = modifier
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(50))
                 .background(
                     color = Color.Transparent,
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(50)
                 )
         )
         Image(

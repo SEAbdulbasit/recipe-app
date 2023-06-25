@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.Recipe
+import sugar
 
 @Composable
 fun InstructionItem(recipe: Recipe, index: Int) {
@@ -38,7 +40,7 @@ fun InstructionItem(recipe: Recipe, index: Int) {
             .padding(16.dp)
             .border(
                 width = 2.dp,
-                color = recipe.bgColor,
+                color = if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
                 shape = RoundedCornerShape(35.dp)
             )
     ) {
@@ -49,7 +51,10 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                 modifier = Modifier
                     .size(50.dp)
                     .shadow(elevation = 10.dp, shape = CircleShape)
-                    .background(recipe.bgColor, CircleShape),
+                    .background(
+                        if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
+                        CircleShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -60,6 +65,7 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                             trim = LineHeightStyle.Trim.None
                         )
                     ),
+                    color = if (recipe.bgColor == sugar) Color.Companion.White else Color.Black,
                     fontWeight = FontWeight.W600,
                     modifier = Modifier.padding(5.dp).rotate(-30f),
                     maxLines = 1,

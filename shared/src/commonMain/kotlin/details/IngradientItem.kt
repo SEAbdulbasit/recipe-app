@@ -23,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import sugar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -39,7 +41,7 @@ fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) 
             .padding(start = 15.dp, end = 15.dp, top = 15.dp)
             .border(
                 width = 2.dp,
-                color = recipe.bgColor,
+                color = if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
                 shape = RoundedCornerShape(35.dp)
             )
 
@@ -58,13 +60,17 @@ fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) 
                             spotColor = Color(0xffCE5A01)
                         )
                         .size(50.dp)
-                        .background(recipe.bgColor, CircleShape)
+                        .background(
+                            color = if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
+                            shape = CircleShape
+                        )
                 ) {
                     chefImage?.let {
                         Image(
                             bitmap = it,
                             contentDescription = null,
                             modifier = Modifier.padding(13.dp).rotate(-30f),
+                            colorFilter = ColorFilter.tint(if (recipe.bgColor == sugar) Color.Companion.White else Color.Black)
                         )
                     }
                 }

@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -51,6 +52,11 @@ fun RecipeListItem(
 
     var parentOffset by remember { mutableStateOf(Offset.Unspecified) }
     var mySize by remember { mutableStateOf(0) }
+    val image = remember { mutableStateOf<ImageBitmap?>(null) }
+
+    LaunchedEffect(Unit) {
+        image.value = resource(recipe.image).readBytes().toImageBitmap()
+    }
 
     Box(modifier = Modifier) {
         Box(
@@ -63,6 +69,7 @@ fun RecipeListItem(
                     ambientColor = Color(0xffCE5A01),
                     spotColor = Color(0xffCE5A01)
                 ).width(width.dp).aspectRatio(1.5f)
+                .clickable { onClick(recipe, parentOffset, mySize, image.value!!) }
                 .background(recipe.bgColor, RoundedCornerShape(35.dp)).fillMaxHeight(),
         ) {
             Row(
@@ -86,20 +93,13 @@ fun RecipeListItem(
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
-
-        val image = remember { mutableStateOf<ImageBitmap?>(null) }
-
-        LaunchedEffect(Unit) {
-            image.value = resource(recipe.image).readBytes().toImageBitmap()
-        }
-
         image.value?.let {
             RecipeListItemImageWrapper(
                 modifier = Modifier.align(Alignment.BottomEnd).fillMaxWidth(0.45f).aspectRatio(1f)
                     .onGloballyPositioned { coordinates ->
                         parentOffset = coordinates.positionInRoot()
                         mySize = coordinates.size.width
-                    }.clickable { onClick(recipe, parentOffset, mySize, it) },
+                    },
                 child = {
                     RecipeImage(
                         it,
