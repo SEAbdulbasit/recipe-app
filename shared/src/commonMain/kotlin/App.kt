@@ -1,21 +1,16 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import details.RecipeDetails
 import model.recipesList
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import recipeslist.RecipesListScreen
 
 @Composable
 fun App() {
@@ -24,40 +19,28 @@ fun App() {
     }
 }
 
-expect fun getPlatformName(): String
-
-
 @Composable
 fun AnimatedListView() {
     val items by remember { mutableStateOf(recipesList) }
     var width by remember { mutableStateOf(0) }
-
+    val currentScreen = remember { mutableStateOf<Screens>(Screens.RecipesList) }
     Box(modifier = Modifier.fillMaxSize().onGloballyPositioned {
         width = it.size.width
     })
 
-    val listState = rememberLazyListState()
-
-    LazyColumn(modifier = Modifier.fillMaxSize().background(sugar), state = listState) {
-        items(items) { item ->
-            RecipeListItemWrapper(
-                child = {
-                    RecipeListItem(item, width)
-                },
-                scrollDirection = if (listState.isScrollingDown()) ScrollDirection.Backward else ScrollDirection.Forward
-            )
+    when (val screen = currentScreen.value) {
+        is Screens.RecipeDetails -> {
+            RecipeDetails(screen.recipe, screen.imageBitmap)
         }
+
+        Screens.RecipesList -> RecipesListScreen(
+            items = items,
+            width = width,
+            onClick = { recipe, offset, size, imageBitmap ->
+                currentScreen.value = Screens.RecipeDetails(
+                    recipe = recipe,
+                    imageBitmap = imageBitmap
+                )
+            })
     }
-}
-
-@Composable
-fun LazyListState.isScrollingDown(): Boolean {
-    val offset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) { derivedStateOf { (firstVisibleItemScrollOffset - offset) > 0 } }.value
-}
-
-@Composable
-fun LazyListState.isScrollingUp(): Boolean {
-    val offset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) { derivedStateOf { (firstVisibleItemScrollOffset - offset) < 0 } }.value
 }

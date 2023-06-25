@@ -1,8 +1,11 @@
+package recipeslist
+
 /**
  * Created by abdulbasit on 18/06/2023.
  */
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,27 +20,38 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
+import toImageBitmap
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RecipeListItem(
     recipe: Recipe,
-    width: Int
+    width: Int,
+    onClick: (recipe: Recipe, offset: Offset, size: Int, bitmap: ImageBitmap) -> Unit,
 ) {
+
+    var parentOffset by remember { mutableStateOf(Offset.Unspecified) }
+    var mySize by remember { mutableStateOf(0) }
+
     Box(modifier = Modifier) {
         Box(
             modifier = Modifier
@@ -81,7 +95,11 @@ fun RecipeListItem(
 
         image.value?.let {
             RecipeListItemImageWrapper(
-                modifier = Modifier.align(Alignment.BottomEnd).fillMaxWidth(0.45f).aspectRatio(1f),
+                modifier = Modifier.align(Alignment.BottomEnd).fillMaxWidth(0.45f).aspectRatio(1f)
+                    .onGloballyPositioned { coordinates ->
+                        parentOffset = coordinates.positionInRoot()
+                        mySize = coordinates.size.width
+                    }.clickable { onClick(recipe, parentOffset, mySize, it) },
                 child = {
                     RecipeImage(
                         it,
