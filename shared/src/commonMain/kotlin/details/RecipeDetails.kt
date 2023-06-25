@@ -1,18 +1,23 @@
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +50,12 @@ import kotlin.math.PI
     ExperimentalFoundationApi::class
 )
 @Composable
-fun RecipeDetails(recipe: Recipe, imageBitmap: ImageBitmap, chefImage: ImageBitmap?, width: Int) {
+fun RecipeDetails(
+    recipe: Recipe,
+    imageBitmap: ImageBitmap,
+    chefImage: ImageBitmap?,
+    goBack: () -> Unit
+) {
     val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
 
@@ -177,6 +187,22 @@ fun RecipeDetails(recipe: Recipe, imageBitmap: ImageBitmap, chefImage: ImageBitm
             itemsIndexed(recipe.instructions) { index, item ->
                 InstructionItem(recipe, index)
             }
+        }
+
+        Box(
+            modifier = Modifier.padding(10.dp).background(
+                color = Color.Black,
+                shape = RoundedCornerShape(50)
+            ).padding(5.dp).clickable {
+                goBack()
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null,
+                tint = recipe.bgColor,
+                modifier = Modifier.size(30.dp)
+            )
         }
     }
 }
