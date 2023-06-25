@@ -9,18 +9,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import kotlinx.coroutines.delay
+import model.Recipe
 
 @Composable
 fun AnimateInEffect(
     intervalStart: Float = 0f,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
+    recipe: Recipe
 ) {
     val visibility = remember { Animatable(0f) }
     val offset = remember { Animatable(30f) }
     val isAnimated = remember { mutableStateOf(false) } // Track animation state
 
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(recipe) {
         delay((intervalStart * 1000).toLong())
         visibility.animateTo(
             targetValue = 1f,
@@ -30,7 +32,7 @@ fun AnimateInEffect(
             )
         )
     }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(recipe) {
         delay((intervalStart * 1000).toLong())
         delay(intervalStart.toLong())
         offset.animateTo(

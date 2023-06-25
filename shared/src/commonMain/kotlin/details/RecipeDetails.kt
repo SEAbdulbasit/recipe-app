@@ -177,9 +177,11 @@ fun RecipeDetails(
             itemsIndexed(recipe.ingredients) { index, value ->
                 AnimateInEffect(
                     intervalStart = index / recipe.instructions.size.toFloat(),
-                ) {
-                    IngredientItem(recipe, value, chefImage)
-                }
+                    recipe = recipe,
+                    content = {
+                        IngredientItem(recipe, value, chefImage)
+                    }
+                )
             }
 
             item {
@@ -195,10 +197,11 @@ fun RecipeDetails(
 
             itemsIndexed(recipe.instructions) { index, item ->
                 AnimateInEffect(
+                    recipe = recipe,
                     intervalStart = index / recipe.instructions.size.toFloat(),
-                ) {
-                    InstructionItem(recipe, index)
-                }
+                    content = {
+                        InstructionItem(recipe, index)
+                    })
             }
         }
 
