@@ -23,16 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun IngredientItem(recipe: Recipe, ingredient: String) {
+fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,11 +60,13 @@ fun IngredientItem(recipe: Recipe, ingredient: String) {
                         .size(50.dp)
                         .background(recipe.bgColor, CircleShape)
                 ) {
-                    Image(
-                        painter = painterResource("compose-multiplatform.xml"),
-                        contentDescription = null,
-                        modifier = Modifier.padding(13.dp).rotate(45f),
-                    )
+                    chefImage?.let {
+                        Image(
+                            bitmap = it,
+                            contentDescription = null,
+                            modifier = Modifier.padding(13.dp).rotate(-30f),
+                        )
+                    }
                 }
             }
 
