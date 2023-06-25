@@ -1,3 +1,4 @@
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -37,6 +37,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import details.FadeInEffect
 import details.IngredientItem
 import details.InstructionItem
 import model.Recipe
@@ -47,7 +48,7 @@ import kotlin.math.PI
 
 @OptIn(
     ExperimentalResourceApi::class, ExperimentalResourceApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class
 )
 @Composable
 fun RecipeDetails(
@@ -163,29 +164,41 @@ fun RecipeDetails(
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 )
 
-                Text(
-                    text = "INGREDIENTS",
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.W700,
-                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                )
+                FadeInEffect {
+                    Text(
+                        text = "INGREDIENTS",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.W700,
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    )
+                }
             }
 
-            items(recipe.ingredients) {
-                IngredientItem(recipe, it, chefImage)
+            itemsIndexed(recipe.ingredients) { index, value ->
+                AnimateInEffect(
+                    intervalStart = index / recipe.instructions.size.toFloat(),
+                ) {
+                    IngredientItem(recipe, value, chefImage)
+                }
             }
 
             item {
-                Text(
-                    text = "STEPS",
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.W700,
-                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                )
+                FadeInEffect {
+                    Text(
+                        text = "STEPS",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.W700,
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    )
+                }
             }
 
             itemsIndexed(recipe.instructions) { index, item ->
-                InstructionItem(recipe, index)
+                AnimateInEffect(
+                    intervalStart = index / recipe.instructions.size.toFloat(),
+                ) {
+                    InstructionItem(recipe, index)
+                }
             }
         }
 
@@ -206,3 +219,4 @@ fun RecipeDetails(
         }
     }
 }
+
