@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -37,7 +38,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import details.FadeInEffect
 import details.IngredientItem
 import details.InstructionItem
 import model.Recipe
@@ -101,6 +101,7 @@ fun RecipeDetails(
     }
 
     val candidateHeight = maxOf(toolbarOffsetHeightPx.value, 200f)
+    val listState = rememberLazyListState()
 
     Box(
         modifier = Modifier.fillMaxSize().background(color = sugar)
@@ -108,6 +109,7 @@ fun RecipeDetails(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            state = listState
         ) {
 
             stickyHeader {
@@ -163,20 +165,22 @@ fun RecipeDetails(
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 )
-
-                FadeInEffect {
-                    Text(
-                        text = "INGREDIENTS",
-                        style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.W700,
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    )
-                }
+                AnimateInEffect(
+                    recipe = recipe,
+                    intervalStart = 0 / (recipe.instructions.size + recipe.ingredients.size + 2).toFloat(),
+                    content = {
+                        Text(
+                            text = "INGREDIENTS",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.W700,
+                            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        )
+                    })
             }
 
             itemsIndexed(recipe.ingredients) { index, value ->
                 AnimateInEffect(
-                    intervalStart = index / recipe.instructions.size.toFloat(),
+                    intervalStart = (index + 1) / (recipe.instructions.size + recipe.ingredients.size + 1).toFloat(),
                     recipe = recipe,
                     content = {
                         IngredientItem(recipe, value, chefImage)
@@ -185,20 +189,24 @@ fun RecipeDetails(
             }
 
             item {
-                FadeInEffect {
-                    Text(
-                        text = "STEPS",
-                        style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.W700,
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    )
-                }
+                AnimateInEffect(
+                    recipe = recipe,
+                    intervalStart = (recipe.ingredients.size + 1) / (recipe.instructions.size + recipe.ingredients.size + 2).toFloat(),
+                    content = {
+                        Text(
+                            text = "STEPS",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.W700,
+                            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        )
+                    }
+                )
             }
 
             itemsIndexed(recipe.instructions) { index, item ->
                 AnimateInEffect(
                     recipe = recipe,
-                    intervalStart = index / recipe.instructions.size.toFloat(),
+                    intervalStart = (recipe.ingredients.size + index + 1) / (recipe.instructions.size + recipe.ingredients.size + 1).toFloat(),
                     content = {
                         InstructionItem(recipe, index)
                     })
