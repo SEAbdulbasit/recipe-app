@@ -50,6 +50,7 @@ import toImageBitmap
 @Composable
 fun RecipeListItem(
     recipe: Recipe,
+    updateIds: String,
     width: Int,
     onClick: (recipe: Recipe, offset: Offset, size: Int, bitmap: ImageBitmap) -> Unit,
 ) {
@@ -73,7 +74,9 @@ fun RecipeListItem(
                     ambientColor = Color(0xffCE5A01),
                     spotColor = Color(0xffCE5A01)
                 ).width(width.dp).aspectRatio(1.5f)
-                .clickable { onClick(recipe, parentOffset, mySize, image.value!!) }
+                .clickable {
+                    onClick(recipe, parentOffset, mySize, image.value!!)
+                }
                 .background(recipe.bgColor, RoundedCornerShape(35.dp)).fillMaxHeight(),
         ) {
             Row(
@@ -82,7 +85,7 @@ fun RecipeListItem(
             ) {
                 Column(modifier = Modifier.align(Alignment.Bottom)) {
                     SharedElement(
-                        key = recipe.title,
+                        key = "${recipe.title}${updateIds}",
                         screenKey = "ListScreen",
                         transitionSpec = CrossFadeTransitionSpec
                     ) {
@@ -93,7 +96,7 @@ fun RecipeListItem(
                         )
                     }
                     SharedElement(
-                        key = recipe.description,
+                        key = "${recipe.description}${updateIds}",
                         screenKey = "ListScreen",
                         transitionSpec = CrossFadeTransitionSpec
                     ) {
@@ -118,7 +121,7 @@ fun RecipeListItem(
                     },
                 child = {
                     SharedMaterialContainer(
-                        key = recipe.image,
+                        key = "${recipe.image}${updateIds}",
                         screenKey = "ListScreen",
                         shape = CircleShape,
                         color = Color.Transparent,

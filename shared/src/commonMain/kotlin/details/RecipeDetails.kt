@@ -167,11 +167,12 @@ fun RecipeDetails(
                 }
             }
 
+
             item {
                 SharedElement(
                     key = recipe.title,
                     screenKey = "DetailsScreen",
-                    transitionSpec = CrossFadeTransitionSpec
+                    transitionSpec = CrossFadeTransitionSpec,
                 ) {
                     Text(
                         text = recipe.title,
@@ -259,4 +260,5 @@ fun RecipeDetails(
         }
     }
 }
+
 
