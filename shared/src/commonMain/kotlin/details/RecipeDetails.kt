@@ -43,6 +43,8 @@ import details.InstructionItem
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
+import sharedelementtransaction.SharedElement
+import sharedelementtransaction.SharedMaterialContainer
 import kotlin.math.PI
 
 
@@ -143,28 +145,55 @@ fun RecipeDetails(
                         )
                     }
 
-                    Image(
-                        bitmap = imageBitmap,
-                        contentDescription = null,
-                        modifier = Modifier.padding(16.dp).aspectRatio(1f).align(Alignment.Center)
-                            .rotate(imageRotation.value.toFloat())
-                    )
+                    Box(
+                        modifier = Modifier.padding(16.dp).aspectRatio(1f)
+                            .align(Alignment.Center)
+                    ) {
+                        SharedMaterialContainer(
+                            key = recipe.image,
+                            screenKey = "DetailsScreen",
+                            color = Color.Transparent,
+                            transitionSpec = FadeOutTransitionSpec
+                        ) {
+                            Image(
+                                bitmap = imageBitmap,
+                                contentDescription = null,
+                                modifier = Modifier.aspectRatio(1f)
+                                    .align(Alignment.Center)
+                                    .rotate(imageRotation.value.toFloat())
+                            )
+                        }
+                    }
                 }
             }
 
             item {
-                Text(
-                    text = recipe.title,
-                    style = MaterialTheme.typography.h5,
-                    fontWeight = FontWeight.W700,
-                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                )
+                SharedElement(
+                    key = recipe.title,
+                    screenKey = "DetailsScreen",
+                    transitionSpec = CrossFadeTransitionSpec
+                ) {
+                    Text(
+                        text = recipe.title,
+                        style = MaterialTheme.typography.h5,
+                        fontWeight = FontWeight.W700,
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    )
+                }
 
-                Text(
-                    text = recipe.description,
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                )
+                SharedElement(
+                    key = recipe.description,
+                    screenKey = "DetailsScreen",
+                    transitionSpec = CrossFadeTransitionSpec
+                ) {
+
+                    Text(
+                        text = recipe.description,
+                        style = MaterialTheme.typography.body2,
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    )
+                }
+
                 AnimateInEffect(
                     recipe = recipe,
                     intervalStart = 0 / (recipe.instructions.size + recipe.ingredients.size + 2).toFloat(),

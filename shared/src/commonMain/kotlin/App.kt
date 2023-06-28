@@ -14,6 +14,12 @@ import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import recipeslist.RecipesListScreen
+import sharedelementtransaction.FadeMode
+import sharedelementtransaction.MaterialArcMotionFactory
+import sharedelementtransaction.MaterialContainerTransformSpec
+import sharedelementtransaction.ProgressThresholds
+import sharedelementtransaction.SharedElementsRoot
+import sharedelementtransaction.SharedElementsTransitionSpec
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -29,34 +35,63 @@ fun App() {
             width = it.size.width
         })
 
-        when (val screen = currentScreen.value) {
-            is Screens.RecipeDetails -> {
-                LaunchedEffect(Unit) {
-                    try {
-                        chefImage.value = resource("chef.png").readBytes().toImageBitmap()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+        SharedElementsRoot {
+            when (val screen = currentScreen.value) {
+                is Screens.RecipeDetails -> {
+                    LaunchedEffect(Unit) {
+                        try {
+                            chefImage.value = resource("chef.png").readBytes().toImageBitmap()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
-                }
-                RecipeDetails(
-                    recipe = screen.recipe,
-                    imageBitmap = screen.imageBitmap,
-                    chefImage = chefImage.value,
-                    goBack = {
-                        currentScreen.value = Screens.RecipesList
-                    }
-                )
-            }
-
-            Screens.RecipesList -> RecipesListScreen(
-                items = items,
-                width = width,
-                onClick = { recipe, offset, size, imageBitmap ->
-                    currentScreen.value = Screens.RecipeDetails(
-                        recipe = recipe,
-                        imageBitmap = imageBitmap,
+                    RecipeDetails(
+                        recipe = screen.recipe,
+                        imageBitmap = screen.imageBitmap,
+                        chefImage = chefImage.value,
+                        goBack = {
+                            currentScreen.value = Screens.RecipesList
+                        }
                     )
-                })
+                }
+
+                Screens.RecipesList -> RecipesListScreen(
+                    items = items,
+                    width = width,
+                    onClick = { recipe, offset, size, imageBitmap ->
+                        currentScreen.value = Screens.RecipeDetails(
+                            recipe = recipe,
+                            imageBitmap = imageBitmap,
+                        )
+                    })
+            }
         }
     }
 }
+
+
+private const val ListScreen = "list"
+private const val DetailsScreen = "details"
+
+private const val TransitionDurationMillis = 1000
+
+val FadeOutTransitionSpec = MaterialContainerTransformSpec(
+    durationMillis = TransitionDurationMillis,
+    fadeMode = FadeMode.Out
+)
+val CrossFadeTransitionSpec = SharedElementsTransitionSpec(
+    durationMillis = TransitionDurationMillis,
+    fadeMode = FadeMode.Cross,
+    fadeProgressThresholds = ProgressThresholds(0.10f, 0.40f)
+)
+val MaterialFadeInTransitionSpec = MaterialContainerTransformSpec(
+    pathMotionFactory = MaterialArcMotionFactory,
+    durationMillis = TransitionDurationMillis,
+    fadeMode = FadeMode.In
+)
+val MaterialFadeOutTransitionSpec = MaterialContainerTransformSpec(
+    pathMotionFactory = MaterialArcMotionFactory,
+    durationMillis = TransitionDurationMillis,
+    fadeMode = FadeMode.Out
+)
+
