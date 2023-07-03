@@ -6,6 +6,8 @@ package recipeslist
 
 import CrossFadeTransitionSpec
 import FadeOutTransitionSpec
+import ListScreen
+import MaterialFadeOutTransitionSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -79,42 +81,54 @@ fun RecipeListItem(
                 }
                 .background(recipe.bgColor, RoundedCornerShape(35.dp)).fillMaxHeight(),
         ) {
-            Row(
-                modifier = Modifier.fillMaxHeight().padding(16.dp).fillMaxWidth(0.55f),
-                verticalAlignment = Alignment.Bottom
+            SharedMaterialContainer(
+                key = "$recipe $updateIds",
+                screenKey = ListScreen,
+                shape = RoundedCornerShape(35.dp),
+                color = recipe.bgColor,
+                elevation = 0.dp,
+                transitionSpec = MaterialFadeOutTransitionSpec
             ) {
-                Column(modifier = Modifier.align(Alignment.Bottom)) {
-                    SharedElement(
-                        key = "${recipe.title}${updateIds}",
-                        screenKey = "ListScreen",
-                        transitionSpec = CrossFadeTransitionSpec
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier.fillMaxHeight().padding(16.dp).fillMaxWidth(0.55f),
+                        verticalAlignment = Alignment.Bottom
                     ) {
-                        Text(
-                            recipe.title,
-                            style = MaterialTheme.typography.h5,
-                            fontWeight = FontWeight.W700
-                        )
-                    }
-                    SharedElement(
-                        key = "${recipe.description}${updateIds}",
-                        screenKey = "ListScreen",
-                        transitionSpec = CrossFadeTransitionSpec
-                    ) {
-                        Text(
-                            recipe.description,
-                            style = MaterialTheme.typography.subtitle1,
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                        Column(modifier = Modifier.align(Alignment.Bottom)) {
+                            SharedElement(
+                                key = "${recipe.title}${updateIds}",
+                                screenKey = "ListScreen",
+                                transitionSpec = CrossFadeTransitionSpec
+                            ) {
+                                Text(
+                                    recipe.title,
+                                    style = MaterialTheme.typography.h5,
+                                    fontWeight = FontWeight.W700
+                                )
+                            }
+                            SharedElement(
+                                key = "${recipe.description}${updateIds}",
+                                screenKey = "ListScreen",
+                                transitionSpec = CrossFadeTransitionSpec
+                            ) {
+                                Text(
+                                    recipe.description,
+                                    style = MaterialTheme.typography.subtitle1,
+                                    maxLines = 3,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(top = 8.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
-                Spacer(modifier = Modifier.weight(1f))
             }
         }
         image.value?.let {
             RecipeListItemImageWrapper(
-                modifier = Modifier.align(Alignment.BottomEnd).fillMaxWidth(0.45f).aspectRatio(1f)
+                modifier = Modifier.align(Alignment.BottomEnd).fillMaxWidth(0.45f)
+                    .aspectRatio(1f)
                     .onGloballyPositioned { coordinates ->
                         parentOffset = coordinates.positionInRoot()
                         mySize = coordinates.size.width

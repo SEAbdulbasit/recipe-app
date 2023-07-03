@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
@@ -104,6 +105,7 @@ fun RecipeDetails(
 
     val candidateHeight = maxOf(toolbarOffsetHeightPx.value, 200f)
     val listState = rememberLazyListState()
+    val (fraction, setFraction) = remember { mutableStateOf(1f) }
 
     Box(
         modifier = Modifier.fillMaxSize().background(color = sugar)
@@ -121,47 +123,59 @@ fun RecipeDetails(
                             elevation = 16.dp,
                             shape = RoundedCornerShape(35.dp),
                             clip = false,
-                            ambientColor = Color(0xffCE5A01),
-                            spotColor = Color(0xffCE5A01)
-                        )
+                            ambientColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f),
+                            spotColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f)
+                        ).alpha(if (fraction < 0.2) 1f - fraction else 0f)
                         .fillMaxWidth()
                         .background(
-                            recipe.bgColor,
-                            RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                            Color.Transparent,
+                            RoundedCornerShape(
+                                bottomEnd = 35.dp, bottomStart = 35.dp
+                            ),
                         ).clip(
                             RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                        )
-                        .height(candidateHeight.dp),
+                        ).height(candidateHeight.dp),
                 ) {
-                    backgroundImage.value?.let {
-                        Image(
-                            bitmap = it,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.background(
-                                Color.Transparent,
-                                RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                            )
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier.padding(16.dp).aspectRatio(1f)
-                            .align(Alignment.Center)
+                    SharedMaterialContainer(
+                        key = "$recipe ",
+                        screenKey = DetailsScreen,
+                        color = recipe.bgColor,
+                        shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                        onFractionChanged = setFraction,
+                        transitionSpec = MaterialFadeInTransitionSpec
                     ) {
-                        SharedMaterialContainer(
-                            key = recipe.image,
-                            screenKey = "DetailsScreen",
-                            color = Color.Transparent,
-                            transitionSpec = FadeOutTransitionSpec
-                        ) {
-                            Image(
-                                bitmap = imageBitmap,
-                                contentDescription = null,
-                                modifier = Modifier.aspectRatio(1f)
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            backgroundImage.value?.let {
+                                Image(
+                                    bitmap = it,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier.background(
+                                        Color.Transparent,
+                                        RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                                    ),
+                                    alpha = 1 - fraction
+                                )
+                            }
+                            Box(
+                                modifier = Modifier.padding(16.dp).aspectRatio(1f)
                                     .align(Alignment.Center)
-                                    .rotate(imageRotation.value.toFloat())
-                            )
+                            ) {
+                                SharedMaterialContainer(
+                                    key = recipe.image,
+                                    screenKey = "DetailsScreen",
+                                    color = Color.Transparent,
+                                    transitionSpec = FadeOutTransitionSpec
+                                ) {
+                                    Image(
+                                        bitmap = imageBitmap,
+                                        contentDescription = null,
+                                        modifier = Modifier.aspectRatio(1f)
+                                            .align(Alignment.Center)
+                                            .rotate(imageRotation.value.toFloat())
+                                    )
+                                }
+                            }
                         }
                     }
                 }

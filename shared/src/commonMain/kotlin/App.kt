@@ -31,9 +31,8 @@ fun App() {
     MaterialTheme {
         val items by remember { mutableStateOf(recipesList) }
         var width by remember { mutableStateOf(0) }
-        val listState = rememberLazyListState()
-        val stableItems = remember(items) { items.toList() }
-        val updateIds = remember { mutableStateOf("") }
+        var updateIds by remember { mutableStateOf("") }
+
         val chefImage = remember { mutableStateOf<ImageBitmap?>(null) }
         LaunchedEffect(Unit) {
             try {
@@ -52,10 +51,9 @@ fun App() {
             val sharedTracnaction = this
             Box {
                 RecipesListScreen(
-                    items = stableItems,
+                    items = items,
                     width = width,
-                    listState = listState,
-                    updateIds = updateIds.value,
+                    updateIds = updateIds,
                     onClick = { recipe, offset, size, imageBitmap ->
                         prepareTransition(
                             recipe.id,
@@ -63,7 +61,7 @@ fun App() {
                             recipe.title,
                             recipe.image
                         )
-                        updateIds.value = "abc"
+                        updateIds = "abc"
 
                         currentScreen.value = Screens.RecipeDetails(
                             recipe = recipe,
@@ -78,7 +76,7 @@ fun App() {
                             imageBitmap = screen.imageBitmap,
                             chefImage = chefImage.value,
                             goBack = {
-                                updateIds.value = ""
+                                updateIds = ""
                                 GlobalScope.launch {
                                     delay(100)
                                     sharedTracnaction.prepareTransition()
@@ -96,10 +94,10 @@ fun App() {
 }
 
 
-private const val ListScreen = "list"
-private const val DetailsScreen = "details"
+const val ListScreen = "list"
+const val DetailsScreen = "details"
 
-private const val TransitionDurationMillis = 1000
+private const val TransitionDurationMillis = 500
 
 val FadeOutTransitionSpec = MaterialContainerTransformSpec(
     durationMillis = TransitionDurationMillis,
