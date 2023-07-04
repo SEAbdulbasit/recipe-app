@@ -261,7 +261,7 @@ fun RecipeDetails(
             modifier = Modifier.padding(10.dp).background(
                 color = Color.Black,
                 shape = RoundedCornerShape(50)
-            ).padding(5.dp).clickable {
+            ).shadow(elevation = 16.dp).padding(5.dp).clickable {
                 goBack()
             }
         ) {

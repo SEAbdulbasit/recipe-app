@@ -7,6 +7,7 @@ package recipeslist
 import CrossFadeTransitionSpec
 import FadeOutTransitionSpec
 import ListScreen
+import MaterialFadeInTransitionSpec
 import MaterialFadeOutTransitionSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,6 +1,5 @@
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,13 +10,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import recipeslist.RecipesListScreen
+import sharedelementtransaction.DelayExit
 import sharedelementtransaction.FadeMode
 import sharedelementtransaction.MaterialArcMotionFactory
 import sharedelementtransaction.MaterialContainerTransformSpec
@@ -50,6 +47,7 @@ fun App() {
         SharedElementsRoot {
             val sharedTracnaction = this
             Box {
+                //    DelayExit(updateIds.contains("update_dummy_ids").not()) {
                 RecipesListScreen(
                     items = items,
                     width = width,
@@ -61,32 +59,38 @@ fun App() {
                             recipe.title,
                             recipe.image
                         )
-                        updateIds = "abc"
+                        updateIds = "update_dummy_ids"
 
                         currentScreen.value = Screens.RecipeDetails(
                             recipe = recipe,
                             imageBitmap = imageBitmap,
                         )
                     })
-
+                //  }
                 when (val screen = currentScreen.value) {
                     is Screens.RecipeDetails -> {
-                        RecipeDetails(
-                            recipe = screen.recipe,
-                            imageBitmap = screen.imageBitmap,
-                            chefImage = chefImage.value,
-                            goBack = {
-                                updateIds = ""
-                                GlobalScope.launch {
-                                    delay(100)
+                        DelayExit(true) {
+                            RecipeDetails(
+                                recipe = screen.recipe,
+                                imageBitmap = screen.imageBitmap,
+                                chefImage = chefImage.value,
+                                goBack = {
+                                    updateIds = ""
                                     sharedTracnaction.prepareTransition()
+                                    prepareTransition(
+                                        screen.recipe.id,
+                                        screen.recipe.description,
+                                        screen.recipe.title,
+                                        screen.recipe.image
+                                    )
                                     currentScreen.value = Screens.RecipesList
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
 
-                    Screens.RecipesList -> Unit
+                    Screens.RecipesList -> {
+                    }
                 }
             }
         }
@@ -97,7 +101,7 @@ fun App() {
 const val ListScreen = "list"
 const val DetailsScreen = "details"
 
-private const val TransitionDurationMillis = 500
+private const val TransitionDurationMillis = 5000
 
 val FadeOutTransitionSpec = MaterialContainerTransformSpec(
     durationMillis = TransitionDurationMillis,
