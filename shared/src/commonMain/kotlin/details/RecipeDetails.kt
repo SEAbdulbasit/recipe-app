@@ -120,7 +120,9 @@ fun RecipeDetails(
                 Box(
                     modifier = Modifier
                         .shadow(
-                            elevation = 16.dp,
+                            elevation = if (fraction < 0.05) {
+                                ((1 - fraction) * 16).dp
+                            } else 0.dp,
                             shape = RoundedCornerShape(35.dp),
                             clip = false,
                             ambientColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f),

@@ -14,7 +14,6 @@ import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import recipeslist.RecipesListScreen
-import sharedelementtransaction.DelayExit
 import sharedelementtransaction.FadeMode
 import sharedelementtransaction.MaterialArcMotionFactory
 import sharedelementtransaction.MaterialContainerTransformSpec
@@ -47,7 +46,6 @@ fun App() {
         SharedElementsRoot {
             val sharedTracnaction = this
             Box {
-                //    DelayExit(updateIds.contains("update_dummy_ids").not()) {
                 RecipesListScreen(
                     items = items,
                     width = width,
@@ -66,27 +64,25 @@ fun App() {
                             imageBitmap = imageBitmap,
                         )
                     })
-                //  }
                 when (val screen = currentScreen.value) {
                     is Screens.RecipeDetails -> {
-                        DelayExit(true) {
-                            RecipeDetails(
-                                recipe = screen.recipe,
-                                imageBitmap = screen.imageBitmap,
-                                chefImage = chefImage.value,
-                                goBack = {
-                                    updateIds = ""
-                                    sharedTracnaction.prepareTransition()
-                                    prepareTransition(
-                                        screen.recipe.id,
-                                        screen.recipe.description,
-                                        screen.recipe.title,
-                                        screen.recipe.image
-                                    )
-                                    currentScreen.value = Screens.RecipesList
-                                }
-                            )
-                        }
+                        RecipeDetails(
+                            recipe = screen.recipe,
+                            imageBitmap = screen.imageBitmap,
+                            chefImage = chefImage.value,
+                            goBack = {
+                                updateIds = ""
+                                sharedTracnaction.prepareTransition()
+                                prepareTransition(
+                                    screen.recipe.id,
+                                    screen.recipe.description,
+                                    screen.recipe.title,
+                                    screen.recipe.image
+                                )
+                                currentScreen.value = Screens.RecipesList
+                            }
+                        )
+
                     }
 
                     Screens.RecipesList -> {
@@ -101,7 +97,7 @@ fun App() {
 const val ListScreen = "list"
 const val DetailsScreen = "details"
 
-private const val TransitionDurationMillis = 5000
+private const val TransitionDurationMillis = 1000
 
 val FadeOutTransitionSpec = MaterialContainerTransformSpec(
     durationMillis = TransitionDurationMillis,
