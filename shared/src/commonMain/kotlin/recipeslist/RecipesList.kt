@@ -29,17 +29,11 @@ fun RecipesListScreen(
     updateIds: String,
     onClick: (recipe: Recipe, offset: Offset, size: Int, imageBitmap: ImageBitmap) -> Unit,
 ) {
-    val scrollingDirection = mutableStateOf(ScrollDirection.Forward)
     val listState = rememberLazyListState()
     LazyColumn(modifier = Modifier.fillMaxSize().background(sugar), state = listState) {
         items(items) { item ->
-            if (listState.isScrollingUp()) {
-                scrollingDirection.value = ScrollDirection.Backward
-            } else {
-                scrollingDirection.value = ScrollDirection.Forward
-            }
             RecipeListItemWrapper(
-                scrollDirection = scrollingDirection.value,
+                scrollDirection = listState.isScrollingUp(),
                 child = {
                     RecipeListItem(
                         recipe = item, width = width, onClick = onClick, updateIds = updateIds
