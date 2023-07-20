@@ -97,7 +97,7 @@ fun App() {
 const val ListScreen = "list"
 const val DetailsScreen = "details"
 
-private const val TransitionDurationMillis = 1000
+private const val TransitionDurationMillis = 700
 
 val FadeOutTransitionSpec = MaterialContainerTransformSpec(
     durationMillis = TransitionDurationMillis,
