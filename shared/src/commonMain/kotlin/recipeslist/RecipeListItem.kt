@@ -73,7 +73,7 @@ fun RecipeListItem(
                 .shadow(
                     elevation = 16.dp,
                     shape = RoundedCornerShape(35.dp),
-                    clip = false,
+                    clip = true,
                     ambientColor = Color(0xffCE5A01),
                     spotColor = Color(0xffCE5A01)
                 ).width(width.dp).aspectRatio(1.5f)
