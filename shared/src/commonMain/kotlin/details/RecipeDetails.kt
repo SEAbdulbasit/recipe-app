@@ -164,7 +164,6 @@ fun RecipeDetails(
                         onFractionChanged = setFraction,
                         transitionSpec = MaterialFadeInTransitionSpec
                     ) {
-                        println("Sensor data is ${sensorDataLive.value.toString()}")
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
                                 Image(
@@ -181,7 +180,7 @@ fun RecipeDetails(
                                             scaleX = 1.050f,
                                             scaleY = 1.050f
                                         ),
-
+                                    alpha = 1 - fraction,
                                     colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
                                         orangeDark.copy(alpha = 0.3f)
                                     )
@@ -216,10 +215,35 @@ fun RecipeDetails(
                                     color = Color.Transparent,
                                     transitionSpec = FadeOutTransitionSpec
                                 ) {
-                                    Box(
-                                        modifier = Modifier
+                                    Box {
+                                        Box(
+                                            modifier = Modifier
+                                                .offset {
+                                                    IntOffset(
+                                                        x = (roll * 2).dp.roundToPx(),
+                                                        y = -(pitch * 2).dp.roundToPx()
+                                                    )
+                                                }
+                                        ) {
 
-                                    ) {
+                                            Image(
+                                                bitmap = imageBitmap,
+                                                contentDescription = null,
+                                                modifier = Modifier.aspectRatio(1f)
+                                                    .align(Alignment.Center)
+                                                    .padding(16.dp)
+                                                    .shadow(
+                                                        elevation = 8.dp,
+                                                        shape = CircleShape,
+                                                        clip = false,
+                                                        ambientColor = Color.Red,
+                                                        spotColor = Color.Red,
+                                                    ),
+                                                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                                    orangeDark.copy(alpha = 0.0f)
+                                                )
+                                            )
+                                        }
                                         Image(
                                             bitmap = imageBitmap,
                                             contentDescription = null,
@@ -227,16 +251,8 @@ fun RecipeDetails(
                                                 .align(Alignment.Center)
                                                 .padding(16.dp)
                                                 .rotate(imageRotation.value.toFloat())
-                                                .shadow(
-                                                    elevation = 8.dp,
-                                                    shape = CircleShape,
-                                                    clip = false,
-                                                    ambientColor = Color.Red,
-                                                    spotColor = Color.Red,
-                                                ).background(
+                                                .background(
                                                     Color.Transparent,
-                                                    CircleShape,
-                                                ).clip(
                                                     CircleShape,
                                                 )
                                         )
@@ -325,12 +341,15 @@ fun RecipeDetails(
         }
 
         Box(
-            modifier = Modifier.padding(10.dp).background(
+            modifier = Modifier.padding(10.dp).alpha(
+                alpha = if (fraction <= 0) 1f else 0f,
+            ).background(
                 color = Color.Black,
                 shape = RoundedCornerShape(50)
-            ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                goBack()
-            }
+            )
+                .shadow(elevation = 16.dp).padding(5.dp).clickable {
+                    goBack()
+                }
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
@@ -341,7 +360,4 @@ fun RecipeDetails(
         }
     }
 }
-
-data class SensorValues(val x: Double, val y: Double, val z: Double)
-
 
