@@ -14,6 +14,7 @@ import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import recipeslist.RecipesListScreen
+import sensor.SensorManager
 import sharedelementtransaction.FadeMode
 import sharedelementtransaction.MaterialArcMotionFactory
 import sharedelementtransaction.MaterialContainerTransformSpec
@@ -23,7 +24,7 @@ import sharedelementtransaction.SharedElementsTransitionSpec
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun App() {
+fun App(sensorManager: SensorManager) {
     MaterialTheme {
         val items by remember { mutableStateOf(recipesList) }
         var width by remember { mutableStateOf(0) }
@@ -67,6 +68,7 @@ fun App() {
                 when (val screen = currentScreen.value) {
                     is Screens.RecipeDetails -> {
                         RecipeDetails(
+                            sensorManager = sensorManager,
                             recipe = screen.recipe,
                             imageBitmap = screen.imageBitmap,
                             chefImage = chefImage.value,

@@ -1,4 +1,3 @@
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,11 +7,13 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -21,6 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,11 +35,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.IngredientItem
@@ -44,6 +49,9 @@ import details.InstructionItem
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
+import sensor.Listener
+import sensor.SensorData
+import sensor.SensorManager
 import sharedelementtransaction.SharedElement
 import sharedelementtransaction.SharedMaterialContainer
 import kotlin.math.PI
@@ -51,17 +59,27 @@ import kotlin.math.PI
 
 @OptIn(
     ExperimentalResourceApi::class, ExperimentalResourceApi::class,
-    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class
+    ExperimentalFoundationApi::class
 )
 @Composable
 fun RecipeDetails(
     recipe: Recipe,
     imageBitmap: ImageBitmap,
     chefImage: ImageBitmap?,
-    goBack: () -> Unit
+    goBack: () -> Unit,
+    sensorManager: SensorManager
 ) {
     val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
+    val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
+    val roll by derivedStateOf { ((sensorDataLive?.value?.roll ?: 0f) * 20).coerceIn(-2f, 2f) }
+    val pitch by derivedStateOf { ((sensorDataLive?.value?.pitch ?: 0f) * 20).coerceIn(-2f, 2f) }
+
+    sensorManager.registerListener(object : Listener {
+        override fun onUpdate(sensorData: SensorData) {
+            sensorDataLive.value = sensorData
+        }
+    })
 
     LaunchedEffect(Unit) {
         try {
@@ -146,8 +164,28 @@ fun RecipeDetails(
                         onFractionChanged = setFraction,
                         transitionSpec = MaterialFadeInTransitionSpec
                     ) {
+                        println("Sensor data is ${sensorDataLive.value.toString()}")
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
+                                Image(
+                                    bitmap = it,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier
+                                        .offset {
+                                            IntOffset(
+                                                x = (roll * 1.5).dp.roundToPx(),
+                                                y = -(pitch * 2).dp.roundToPx()
+                                            )
+                                        }.graphicsLayer(
+                                            scaleX = 1.050f,
+                                            scaleY = 1.050f
+                                        ),
+
+                                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                        orangeDark.copy(alpha = 0.3f)
+                                    )
+                                )
                                 Image(
                                     bitmap = it,
                                     contentDescription = null,
@@ -155,12 +193,21 @@ fun RecipeDetails(
                                     modifier = Modifier.background(
                                         Color.Transparent,
                                         RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                                    ).offset {
+                                        IntOffset(
+                                            x = -(roll).dp.roundToPx(),
+                                            y = (pitch).dp.roundToPx()
+                                        )
+                                    }.graphicsLayer(
+                                        shadowElevation = 8f,
+                                        scaleX = 1.050f,
+                                        scaleY = 1.050f
                                     ),
                                     alpha = 1 - fraction
                                 )
                             }
                             Box(
-                                modifier = Modifier.padding(16.dp).aspectRatio(1f)
+                                modifier = Modifier.aspectRatio(1f)
                                     .align(Alignment.Center)
                             ) {
                                 SharedMaterialContainer(
@@ -169,13 +216,31 @@ fun RecipeDetails(
                                     color = Color.Transparent,
                                     transitionSpec = FadeOutTransitionSpec
                                 ) {
-                                    Image(
-                                        bitmap = imageBitmap,
-                                        contentDescription = null,
-                                        modifier = Modifier.aspectRatio(1f)
-                                            .align(Alignment.Center)
-                                            .rotate(imageRotation.value.toFloat())
-                                    )
+                                    Box(
+                                        modifier = Modifier
+
+                                    ) {
+                                        Image(
+                                            bitmap = imageBitmap,
+                                            contentDescription = null,
+                                            modifier = Modifier.aspectRatio(1f)
+                                                .align(Alignment.Center)
+                                                .padding(16.dp)
+                                                .rotate(imageRotation.value.toFloat())
+                                                .shadow(
+                                                    elevation = 8.dp,
+                                                    shape = CircleShape,
+                                                    clip = false,
+                                                    ambientColor = Color.Red,
+                                                    spotColor = Color.Red,
+                                                ).background(
+                                                    Color.Transparent,
+                                                    CircleShape,
+                                                ).clip(
+                                                    CircleShape,
+                                                )
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -276,5 +341,7 @@ fun RecipeDetails(
         }
     }
 }
+
+data class SensorValues(val x: Double, val y: Double, val z: Double)
 
 
