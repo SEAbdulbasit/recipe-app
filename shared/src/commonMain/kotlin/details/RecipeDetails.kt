@@ -1,3 +1,5 @@
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -72,14 +74,26 @@ fun RecipeDetails(
     val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
-    val roll by derivedStateOf { ((sensorDataLive?.value?.roll ?: 0f) * 20).coerceIn(-2f, 2f) }
-    val pitch by derivedStateOf { ((sensorDataLive?.value?.pitch ?: 0f) * 20).coerceIn(-2f, 2f) }
+    val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-2f, 2f) }
+    val pitch by derivedStateOf { (sensorDataLive.value.pitch * 20).coerceIn(-2f, 2f) }
+
+
+    val tweenDuration = 300
 
     sensorManager.registerListener(object : Listener {
         override fun onUpdate(sensorData: SensorData) {
             sensorDataLive.value = sensorData
         }
     })
+
+    val animatedOffset = animateIntOffsetAsState(
+        targetValue = IntOffset((roll * 6f).toInt(), -(pitch * 6f).toInt()),
+        animationSpec = tween(tweenDuration)
+    )
+    val animatedOffset2 = animateIntOffsetAsState(
+        targetValue = IntOffset(-roll.toInt(), pitch.toInt()),
+        animationSpec = tween(tweenDuration)
+    )
 
     LaunchedEffect(Unit) {
         try {
@@ -167,15 +181,12 @@ fun RecipeDetails(
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
                                 Image(
-                                    bitmap = it,
+                                    bitmap = blurFilter(it, getPlatformContext()),
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
                                         .offset {
-                                            IntOffset(
-                                                x = (roll * 1.5).dp.roundToPx(),
-                                                y = -(pitch * 2).dp.roundToPx()
-                                            )
+                                            animatedOffset.value
                                         }.graphicsLayer(
                                             scaleX = 1.050f,
                                             scaleY = 1.050f
@@ -193,10 +204,8 @@ fun RecipeDetails(
                                         Color.Transparent,
                                         RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
                                     ).offset {
-                                        IntOffset(
-                                            x = -(roll).dp.roundToPx(),
-                                            y = (pitch).dp.roundToPx()
-                                        )
+                                        animatedOffset2.value
+
                                     }.graphicsLayer(
                                         shadowElevation = 8f,
                                         scaleX = 1.050f,
@@ -233,7 +242,7 @@ fun RecipeDetails(
                                                     .align(Alignment.Center)
                                                     .padding(16.dp)
                                                     .shadow(
-                                                        elevation = 8.dp,
+                                                        elevation = 16.dp,
                                                         shape = CircleShape,
                                                         clip = false,
                                                         ambientColor = Color.Red,
@@ -244,6 +253,7 @@ fun RecipeDetails(
                                                 )
                                             )
                                         }
+
                                         Image(
                                             bitmap = imageBitmap,
                                             contentDescription = null,

@@ -1,4 +1,3 @@
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -11,7 +10,7 @@ import sensor.SensorDataManager
 import sensor.SensorManager
 
 @Composable
-fun MainView(context: Context) {
+fun MainView() {
 
     val sensorManager = SensorManager()
 

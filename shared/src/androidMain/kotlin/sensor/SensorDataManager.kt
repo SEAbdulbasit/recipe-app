@@ -5,7 +5,9 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import kotlinx.coroutines.channels.Channel
+import kotlin.math.PI
 
 
 /**
@@ -44,6 +46,12 @@ class SensorDataManager(context: Context) : SensorEventListener {
             if (SensorManager.getRotationMatrix(r, i, gravity, geomagnetic)) {
                 var orientation = FloatArray(3)
                 SensorManager.getOrientation(r, orientation)
+                val adjustedPitch = orientation[1] - (PI.toFloat() / 2)
+
+                Log.d(
+                    "Sensor Values ",
+                    "Sensor values are ${orientation[2]} and pitch is ${orientation[1] - 1.50}"
+                )
 
                 data.trySend(
                     SensorData(

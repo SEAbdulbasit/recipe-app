@@ -11,9 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MainView(
-                LocalContext.current
-            )
+            MainView()
         }
     }
 }
