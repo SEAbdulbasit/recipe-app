@@ -5,5 +5,5 @@ import sensor.SensorManager
 @Composable
 fun MainView() {
     val sensorManager = SensorManager()
-    App(sensorManager)
+    App(sensorManager, true)
 }

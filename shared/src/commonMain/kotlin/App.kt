@@ -10,6 +10,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
+import details.RecipeDetails
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
@@ -24,34 +27,33 @@ import sharedelementtransaction.SharedElementsTransitionSpec
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun App(sensorManager: SensorManager) {
+fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
     MaterialTheme {
         val items by remember { mutableStateOf(recipesList) }
         var width by remember { mutableStateOf(0) }
+        var currentScreen by remember { mutableStateOf<Screens>(Screens.RecipesList) }
         var updateIds by remember { mutableStateOf("") }
 
         val chefImage = remember { mutableStateOf<ImageBitmap?>(null) }
         LaunchedEffect(Unit) {
-            try {
+            withContext(Dispatchers.Default) {
                 chefImage.value = resource("chef.png").readBytes().toImageBitmap()
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
 
-        val currentScreen = remember { mutableStateOf<Screens>(Screens.RecipesList) }
         Box(modifier = Modifier.fillMaxSize().onGloballyPositioned {
             width = it.size.width
         })
 
         SharedElementsRoot {
-            val sharedTracnaction = this
+            val sharedTransaction = this
             Box {
                 RecipesListScreen(
+                    isLarge = isLarge,
                     items = items,
                     width = width,
                     updateIds = updateIds,
-                    onClick = { recipe, offset, size, imageBitmap ->
+                    onClick = { recipe, imageBitmap ->
                         prepareTransition(
                             recipe.id,
                             recipe.description,
@@ -59,35 +61,37 @@ fun App(sensorManager: SensorManager) {
                             recipe.image
                         )
                         updateIds = "update_dummy_ids"
-
-                        currentScreen.value = Screens.RecipeDetails(
+                        currentScreen = Screens.RecipeDetails(
                             recipe = recipe,
                             imageBitmap = imageBitmap,
                         )
                     })
-                when (val screen = currentScreen.value) {
+
+                when (val screen = currentScreen) {
                     is Screens.RecipeDetails -> {
                         RecipeDetails(
+                            isLarge = isLarge,
                             sensorManager = sensorManager,
                             recipe = screen.recipe,
                             imageBitmap = screen.imageBitmap,
                             chefImage = chefImage.value,
                             goBack = {
                                 updateIds = ""
-                                sharedTracnaction.prepareTransition()
+                                sharedTransaction.prepareTransition()
                                 prepareTransition(
                                     screen.recipe.id,
                                     screen.recipe.description,
                                     screen.recipe.title,
                                     screen.recipe.image
                                 )
-                                currentScreen.value = Screens.RecipesList
+                                currentScreen = Screens.RecipesList
                             }
                         )
 
                     }
 
                     Screens.RecipesList -> {
+                        // do nothing
                     }
                 }
             }

@@ -7,7 +7,6 @@ package recipeslist
 import CrossFadeTransitionSpec
 import FadeOutTransitionSpec
 import ListScreen
-import MaterialFadeInTransitionSpec
 import MaterialFadeOutTransitionSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,18 +25,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,11 +49,8 @@ fun RecipeListItem(
     recipe: Recipe,
     updateIds: String,
     width: Int,
-    onClick: (recipe: Recipe, offset: Offset, size: Int, bitmap: ImageBitmap) -> Unit,
+    onClick: (recipe: Recipe, bitmap: ImageBitmap) -> Unit,
 ) {
-
-    var parentOffset by remember { mutableStateOf(Offset.Unspecified) }
-    var mySize by remember { mutableStateOf(0) }
     val image = remember { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(Unit) {
@@ -68,19 +59,20 @@ fun RecipeListItem(
 
     Box(modifier = Modifier) {
         Box(
-            modifier = Modifier
-                .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+            modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                 .shadow(
                     elevation = 16.dp,
                     shape = RoundedCornerShape(35.dp),
                     clip = true,
                     ambientColor = Color(0xffCE5A01),
                     spotColor = Color(0xffCE5A01)
-                ).width(width.dp).aspectRatio(1.5f)
+                ).width(width.dp)
+                .aspectRatio(1.5f)
+                .background(recipe.bgColor, RoundedCornerShape(35.dp))
+                .fillMaxHeight()
                 .clickable {
-                    onClick(recipe, parentOffset, mySize, image.value!!)
+                    onClick(recipe, image.value!!)
                 }
-                .background(recipe.bgColor, RoundedCornerShape(35.dp)).fillMaxHeight(),
         ) {
             SharedMaterialContainer(
                 key = "$recipe $updateIds",
@@ -127,13 +119,8 @@ fun RecipeListItem(
             }
         }
         image.value?.let {
-            RecipeListItemImageWrapper(
-                modifier = Modifier.align(Alignment.BottomEnd).fillMaxWidth(0.45f)
-                    .aspectRatio(1f)
-                    .onGloballyPositioned { coordinates ->
-                        parentOffset = coordinates.positionInRoot()
-                        mySize = coordinates.size.width
-                    },
+            RecipeListItemImageWrapper(modifier = Modifier.align(Alignment.BottomEnd)
+                .fillMaxWidth(0.45f).aspectRatio(1f),
                 child = {
                     SharedMaterialContainer(
                         key = "${recipe.image}${updateIds}",
@@ -143,8 +130,7 @@ fun RecipeListItem(
                         transitionSpec = FadeOutTransitionSpec
                     ) {
                         RecipeImage(
-                            it,
-                            Modifier
+                            it, Modifier
                         )
                     }
                 })

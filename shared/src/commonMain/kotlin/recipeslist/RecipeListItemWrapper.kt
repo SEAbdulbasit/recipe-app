@@ -26,8 +26,7 @@ fun RecipeListItemWrapper(
 ) {
     val cameraAnimatable = remember { Animatable(initialValue = 7.0f) }
     val scaleAnimatable = remember { Animatable(initialValue = 0.7f) }
-    val rotateXAnimatable =
-        remember { Animatable(initialValue = if (scrollDirection) 60f else -60f) }
+    val rotateXAnimatable = remember { Animatable(initialValue = if (scrollDirection) 60f else -60f) }
 
     // Observe changes to scrollDirection and update rotateXAnimatable accordingly
     LaunchedEffect(scrollDirection) {

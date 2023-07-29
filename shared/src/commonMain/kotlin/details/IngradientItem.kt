@@ -59,7 +59,7 @@ fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) 
                             ambientColor = Color(0xffCE5A01),
                             spotColor = Color(0xffCE5A01)
                         )
-                        .size(50.dp)
+                        .size(45.dp)
                         .background(
                             color = if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
                             shape = CircleShape
@@ -69,7 +69,7 @@ fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) 
                         Image(
                             bitmap = it,
                             contentDescription = null,
-                            modifier = Modifier.padding(13.dp).rotate(-30f),
+                            modifier = Modifier.padding(12.dp).rotate(-30f),
                             colorFilter = ColorFilter.tint(if (recipe.bgColor == sugar) Color.Companion.White else Color.Black)
                         )
                     }

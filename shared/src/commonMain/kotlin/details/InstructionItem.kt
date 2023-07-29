@@ -77,7 +77,8 @@ fun InstructionItem(recipe: Recipe, index: Int) {
         Text(
             text = recipe.instructions[index],
             style = MaterialTheme.typography.body1.copy(
-                letterSpacing = 1.2.sp
+                letterSpacing = 1.2.sp,
+                lineHeight = 1.7.sp
             ),
             modifier = Modifier
                 .fillMaxWidth().fillMaxHeight()
