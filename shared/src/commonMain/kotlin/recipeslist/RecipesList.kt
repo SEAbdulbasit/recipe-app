@@ -33,7 +33,7 @@ fun RecipesListScreen(
 ) {
     val listState = rememberLazyGridState()
     LazyVerticalGrid(
-        modifier = Modifier.fillMaxSize().background(sugar).padding(16.dp),
+        modifier = Modifier.fillMaxSize().background(sugar),
         state = listState,
         columns = GridCells.Fixed(if (isLarge) 3 else 1)
     ) {
