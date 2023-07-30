@@ -31,7 +31,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) {
-    Box {
+    Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

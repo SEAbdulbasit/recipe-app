@@ -31,7 +31,7 @@ import model.Recipe
 
 @Composable
 fun InstructionItem(recipe: Recipe, index: Int) {
-    Box {
+    Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -46,7 +46,6 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                 text = recipe.instructions[index],
                 style = MaterialTheme.typography.body1.copy(
                     letterSpacing = 1.2.sp,
-                    lineHeight = 1.7.sp
                 ),
                 modifier = Modifier
                     .fillMaxWidth().fillMaxHeight()

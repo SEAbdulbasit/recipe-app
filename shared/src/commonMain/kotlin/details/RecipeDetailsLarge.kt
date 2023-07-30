@@ -262,13 +262,13 @@ fun RecipeDetailsLarge(
                 val listState = rememberLazyListState()
 
                 Box(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)
                 ) {
                     LazyColumn(
                         contentPadding = PaddingValues(64.dp),
                         userScrollEnabled = true,
                         verticalArrangement = Arrangement.Absolute.spacedBy(16.dp),
-                        modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),
+                        modifier = Modifier.fillMaxSize(),
                         state = listState
                     ) {
                         StepsAndDetails(recipe, chefImage)

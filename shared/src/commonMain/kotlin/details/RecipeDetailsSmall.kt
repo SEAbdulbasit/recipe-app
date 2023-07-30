@@ -134,10 +134,10 @@ fun RecipeDetailsSmall(
 
     Box(
         modifier = Modifier.fillMaxSize().background(color = sugar)
-            .nestedScroll(nestedScrollConnection)
+           // .nestedScroll(nestedScrollConnection)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),
             state = listState
         ) {
 
