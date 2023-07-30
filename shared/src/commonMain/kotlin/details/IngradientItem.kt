@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,7 +22,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,19 +31,31 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(
-                width = 2.dp,
-                color = recipe.bgColor,
-                shape = RoundedCornerShape(35.dp)
+    Box {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .border(
+                    width = 2.dp,
+                    color = recipe.bgColor,
+                    shape = RoundedCornerShape(35.dp)
+                )
+        ) {
+            Text(
+                text = ingredient,
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 55.dp, end = 8.dp, top = 16.dp, bottom = 16.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-    ) {
-        Box(modifier = Modifier.graphicsLayer {
-            translationY = -25f
-        }) {
+        }
+
+        Box(
+            modifier = Modifier.padding(start = 4.dp)
+        ) {
             Box(
                 modifier = Modifier
                     .size(45.dp)
@@ -65,15 +75,7 @@ fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) 
                 }
             }
         }
-
-        Text(
-            text = ingredient,
-            style = MaterialTheme.typography.body2,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
     }
+
+
 }

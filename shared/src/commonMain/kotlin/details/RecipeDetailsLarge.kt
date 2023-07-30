@@ -151,7 +151,6 @@ fun RecipeDetailsLarge(
                         onFractionChanged = setFraction,
                         transitionSpec = MaterialFadeInTransitionSpec
                     ) {
-
                         // background image + its shadow
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
@@ -224,12 +223,9 @@ fun RecipeDetailsLarge(
                                                         elevation = 16.dp,
                                                         shape = CircleShape,
                                                         clip = false,
-                                                        ambientColor = Color.Red,
+                                                        ambientColor = orangeDark.copy(alpha = 0.5f),
                                                         spotColor = Color.Red,
-                                                    ),
-                                                colorFilter = ColorFilter.tint(
-                                                    orangeDark.copy(alpha = 0.0f)
-                                                )
+                                                    )
                                             )
                                         }
 
@@ -254,6 +250,7 @@ fun RecipeDetailsLarge(
 
                 BackButton(goBack, fraction)
             }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -262,13 +259,13 @@ fun RecipeDetailsLarge(
                     .nestedScroll(nestedScrollConnection)
 
             ) {
-
                 val listState = rememberLazyListState()
+
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     LazyColumn(
-                        contentPadding = PaddingValues(32.dp),
+                        contentPadding = PaddingValues(64.dp),
                         userScrollEnabled = true,
                         verticalArrangement = Arrangement.Absolute.spacedBy(16.dp),
                         modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),

@@ -8,7 +8,6 @@ package details
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,19 +31,32 @@ import model.Recipe
 
 @Composable
 fun InstructionItem(recipe: Recipe, index: Int) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .border(
-                width = 2.dp,
-                color = recipe.bgColor,
-                shape = RoundedCornerShape(35.dp)
+    Box {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .border(
+                    width = 2.dp,
+                    color = recipe.bgColor,
+                    shape = RoundedCornerShape(35.dp)
+                )
+        ) {
+            Text(
+                text = recipe.instructions[index],
+                style = MaterialTheme.typography.body1.copy(
+                    letterSpacing = 1.2.sp,
+                    lineHeight = 1.7.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth().fillMaxHeight()
+                    .padding(start = 70.dp, end = 20.dp, top = 20.dp, bottom = 20.dp),
             )
-    ) {
-        Box(modifier = Modifier.graphicsLayer {
-            translationY = -25f
-        }) {
+        }
+
+        Box(
+            modifier = Modifier
+        ) {
             Box(
                 modifier = Modifier
                     .size(50.dp)
@@ -72,16 +83,5 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                 )
             }
         }
-
-        Text(
-            text = recipe.instructions[index],
-            style = MaterialTheme.typography.body1.copy(
-                letterSpacing = 1.2.sp,
-                lineHeight = 1.7.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth().fillMaxHeight()
-                .padding(20.dp),
-        )
     }
 }

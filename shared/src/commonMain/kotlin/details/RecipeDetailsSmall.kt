@@ -13,13 +13,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -42,19 +39,16 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import details.IngredientItem
-import details.InstructionItem
+import details.StepsAndDetails
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import sensor.Listener
 import sensor.SensorData
 import sensor.SensorManager
-import sharedelementtransaction.SharedElement
 import sharedelementtransaction.SharedMaterialContainer
 import kotlin.math.PI
 
@@ -273,80 +267,7 @@ fun RecipeDetailsSmall(
                 }
             }
 
-
-            item {
-                SharedElement(
-                    key = recipe.title,
-                    screenKey = "DetailsScreen",
-                    transitionSpec = CrossFadeTransitionSpec,
-                ) {
-                    Text(
-                        text = recipe.title,
-                        style = MaterialTheme.typography.h5,
-                        fontWeight = FontWeight.W700,
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    )
-                }
-
-                SharedElement(
-                    key = recipe.description,
-                    screenKey = "DetailsScreen",
-                    transitionSpec = CrossFadeTransitionSpec
-                ) {
-
-                    Text(
-                        text = recipe.description,
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    )
-                }
-
-                AnimateInEffect(
-                    recipe = recipe,
-                    intervalStart = 0 / (recipe.instructions.size + recipe.ingredients.size + 2).toFloat(),
-                    content = {
-                        Text(
-                            text = "INGREDIENTS",
-                            style = MaterialTheme.typography.h6,
-                            fontWeight = FontWeight.W700,
-                            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                        )
-                    })
-            }
-
-            itemsIndexed(recipe.ingredients) { index, value ->
-                AnimateInEffect(
-                    intervalStart = (index + 1) / (recipe.instructions.size + recipe.ingredients.size + 1).toFloat(),
-                    recipe = recipe,
-                    content = {
-                        IngredientItem(recipe, value, chefImage)
-                    }
-                )
-            }
-
-            item {
-                AnimateInEffect(
-                    recipe = recipe,
-                    intervalStart = (recipe.ingredients.size + 1) / (recipe.instructions.size + recipe.ingredients.size + 2).toFloat(),
-                    content = {
-                        Text(
-                            text = "STEPS",
-                            style = MaterialTheme.typography.h6,
-                            fontWeight = FontWeight.W700,
-                            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                        )
-                    }
-                )
-            }
-
-            itemsIndexed(recipe.instructions) { index, item ->
-                AnimateInEffect(
-                    recipe = recipe,
-                    intervalStart = (recipe.ingredients.size + index + 1) / (recipe.instructions.size + recipe.ingredients.size + 1).toFloat(),
-                    content = {
-                        InstructionItem(recipe, index)
-                    })
-            }
+            StepsAndDetails(recipe, chefImage)
         }
 
         Box(
