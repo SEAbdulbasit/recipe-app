@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
@@ -74,6 +73,7 @@ fun RecipeDetailsLarge(
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
     val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-2f, 2f) }
     val pitch by derivedStateOf { (sensorDataLive.value.pitch * 20).coerceIn(-2f, 2f) }
+    val (fraction, setFraction) = remember { mutableStateOf(1f) }
 
     val tweenDuration = 300
 
@@ -128,8 +128,12 @@ fun RecipeDetailsLarge(
     }
 
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier.background(sugar)) {
+
+
+    Box(
+        modifier = Modifier.fillMaxSize().background(if (recipe.bgColor == sugar) yellow else sugar)
+    ) {
+        Row {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -137,19 +141,14 @@ fun RecipeDetailsLarge(
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Color.Transparent,
-                            RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp)
-                        ).clip(
-                            RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp)
-                        ).fillMaxHeight(),
+                        .fillMaxSize()
                 ) {
                     SharedMaterialContainer(
                         key = "$recipe ",
                         screenKey = DetailsScreen,
                         color = recipe.bgColor,
                         shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
+                        onFractionChanged = setFraction,
                         transitionSpec = MaterialFadeInTransitionSpec
                     ) {
 
@@ -159,7 +158,7 @@ fun RecipeDetailsLarge(
                                 Image(
                                     bitmap = blurFilter(it, getPlatformContext()),
                                     contentDescription = null,
-                                    contentScale = ContentScale.Fit,
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .offset {
                                             animatedOffset.value
@@ -174,7 +173,7 @@ fun RecipeDetailsLarge(
                                 Image(
                                     bitmap = it,
                                     contentDescription = null,
-                                    contentScale = ContentScale.Fit,
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier.background(
                                         Color.Transparent,
                                         RoundedCornerShape(
@@ -253,38 +252,20 @@ fun RecipeDetailsLarge(
                     }
                 }
 
-                Box(
-                    modifier = Modifier.padding(32.dp)
-                        .clip(RoundedCornerShape(50))
-                        .clickable {
-                            goBack()
-                        }.background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(50)
-                        ).padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = Color.Black,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.padding(start = 8.dp))
-                        Text(text = "Back to Recipes", style = MaterialTheme.typography.subtitle2)
-                    }
-                }
+                BackButton(goBack, fraction)
             }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(if (recipe.bgColor == sugar) yellow else sugar)
                     .weight(1f)
+                    .nestedScroll(nestedScrollConnection)
 
             ) {
 
                 val listState = rememberLazyListState()
                 Box(
-                    modifier = Modifier.fillMaxSize().background(color = sugar)
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     LazyColumn(
                         contentPadding = PaddingValues(32.dp),
@@ -297,6 +278,35 @@ fun RecipeDetailsLarge(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun BackButton(goBack: () -> Unit, fraction: Float) {
+    Box(
+        modifier = Modifier.padding(start = 32.dp, top = 16.dp).alpha(
+            alpha = if (fraction <= 0) 1f else 0f,
+        )
+            .clip(
+                RoundedCornerShape(50)
+            )
+            .clickable {
+                goBack()
+            }.background(
+                color = Color.White,
+                shape = RoundedCornerShape(50)
+            ).padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null,
+                tint = Color.Black,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(Modifier.padding(start = 8.dp))
+            Text(text = "Back to Recipes", style = MaterialTheme.typography.subtitle2)
         }
     }
 }

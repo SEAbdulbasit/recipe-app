@@ -23,18 +23,18 @@ fun RecipeDetails(
 ) {
     if (isLarge)
         RecipeDetailsLarge(
-            recipe,
-            imageBitmap,
-            chefImage,
+            recipe = recipe,
+            imageBitmap = imageBitmap,
+            chefImage = chefImage,
             goBack = goBack,
-            sensorManager
+            sensorManager = sensorManager
         )
     else
         RecipeDetailsSmall(
-            recipe,
-            imageBitmap,
-            chefImage,
+            recipe = recipe,
+            imageBitmap = imageBitmap,
+            chefImage = chefImage,
             goBack = goBack,
-            sensorManager
+            sensorManager = sensorManager
         )
 }

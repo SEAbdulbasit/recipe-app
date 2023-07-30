@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.Recipe
-import sugar
 
 @Composable
 fun InstructionItem(recipe: Recipe, index: Int) {
@@ -40,7 +39,7 @@ fun InstructionItem(recipe: Recipe, index: Int) {
             .padding(16.dp)
             .border(
                 width = 2.dp,
-                color = if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
+                color = recipe.bgColor,
                 shape = RoundedCornerShape(35.dp)
             )
     ) {
@@ -52,7 +51,7 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                     .size(50.dp)
                     .shadow(elevation = 10.dp, shape = CircleShape)
                     .background(
-                        if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
+                        recipe.bgColor,
                         CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -65,7 +64,7 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                             trim = LineHeightStyle.Trim.None
                         )
                     ),
-                    color = if (recipe.bgColor == sugar) Color.Companion.White else Color.Black,
+                    color = Color.Black,
                     fontWeight = FontWeight.W600,
                     modifier = Modifier.padding(5.dp).rotate(-30f),
                     maxLines = 1,

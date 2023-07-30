@@ -129,7 +129,6 @@ fun RecipeDetailsSmall(
 
             override suspend fun onPreFling(available: Velocity): Velocity {
                 imageRotation.value += available.y.toInt()
-
                 return super.onPreFling(available)
             }
         }
