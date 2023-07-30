@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -33,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -42,8 +40,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
@@ -127,17 +129,35 @@ fun RecipeDetailsLarge(
         }
     }
 
-
-
-
     Box(
         modifier = Modifier.fillMaxSize().background(if (recipe.bgColor == sugar) yellow else sugar)
     ) {
+        val size = mutableStateOf<IntSize>(IntSize(0, 0))
         Row {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
+                    .fillMaxSize().onGloballyPositioned {
+                        size.value = it.size
+                    }
+                    .weight(1f).pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                // on every relayout Compose will send synthetic Move event,
+                                // so we skip it to avoid event spam
+                                if (event.type == PointerEventType.Move) {
+                                    val previousPosition = sensorDataLive.value
+                                    val position = event.changes.first().position
+                                    sensorDataLive.value =
+                                        SensorData(
+                                            roll = position.x - size.value.height / 2,
+                                            pitch = position.y - size.value.width / 2
+                                        )
+                                }
+                            }
+
+                        }
+                    }
             ) {
                 Box(
                     modifier = Modifier
@@ -173,20 +193,22 @@ fun RecipeDetailsLarge(
                                     bitmap = it,
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
-                                    modifier = Modifier.background(
-                                        Color.Transparent,
-                                        RoundedCornerShape(
-                                            bottomEnd = 35.dp,
-                                            bottomStart = 35.dp
-                                        ),
-                                    ).offset {
-                                        animatedOffset2.value
+                                    modifier = Modifier
+                                        .background(
+                                            Color.Transparent,
+                                            RoundedCornerShape(
+                                                bottomEnd = 35.dp,
+                                                bottomStart = 35.dp
+                                            ),
+                                        )
+                                        .offset {
+                                            animatedOffset2.value
 
-                                    }.graphicsLayer(
-                                        shadowElevation = 8f,
-                                        scaleX = 1.050f,
-                                        scaleY = 1.050f
-                                    ),
+                                        }.graphicsLayer(
+                                            shadowElevation = 8f,
+                                            scaleX = 1.050f,
+                                            scaleY = 1.050f
+                                        ),
                                 )
                             }
 
@@ -203,32 +225,6 @@ fun RecipeDetailsLarge(
                                     transitionSpec = FadeOutTransitionSpec
                                 ) {
                                     Box(modifier = Modifier.padding(32.dp)) {
-                                        Box(
-                                            modifier = Modifier
-                                                .offset {
-                                                    IntOffset(
-                                                        x = (roll * 2).dp.roundToPx(),
-                                                        y = -(pitch * 2).dp.roundToPx()
-                                                    )
-                                                }
-                                        ) {
-
-                                            Image(
-                                                bitmap = imageBitmap,
-                                                contentDescription = null,
-                                                modifier = Modifier.aspectRatio(1f)
-                                                    .align(Alignment.Center)
-                                                    .padding(16.dp)
-                                                    .shadow(
-                                                        elevation = 16.dp,
-                                                        shape = CircleShape,
-                                                        clip = false,
-                                                        ambientColor = orangeDark.copy(alpha = 0.5f),
-                                                        spotColor = Color.Red,
-                                                    )
-                                            )
-                                        }
-
                                         Image(
                                             bitmap = imageBitmap,
                                             contentDescription = null,
@@ -236,10 +232,13 @@ fun RecipeDetailsLarge(
                                                 .align(Alignment.Center)
                                                 .padding(16.dp)
                                                 .rotate(imageRotation.value.toFloat())
-                                                .background(
-                                                    Color.Transparent,
-                                                    CircleShape,
-                                                )
+//                                                .shadow(
+//                                                    elevation = 16.dp,
+//                                                    shape = CircleShape,
+//                                                    clip = false,
+//                                                    ambientColor = orangeDark.copy(alpha = 0.5f),
+//                                                    spotColor = Color.Red,
+//                                                )
                                         )
                                     }
                                 }
@@ -255,20 +254,33 @@ fun RecipeDetailsLarge(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(if (recipe.bgColor == sugar) yellow else sugar)
+                    .pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                if (event.type == PointerEventType.Scroll) {
+                                    val position = event.changes.first().position
+                                    // on every relayout Compose will send synthetic Move event,
+                                    // so we skip it to avoid event spam
+                                    imageRotation.value =
+                                        (imageRotation.value + position.getDistance()
+                                            .toInt() * 0.010).toInt()
+                                }
+                            }
+                        }
+                    }
                     .weight(1f)
-                    .nestedScroll(nestedScrollConnection)
-
             ) {
                 val listState = rememberLazyListState()
 
                 Box(
-                    modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     LazyColumn(
                         contentPadding = PaddingValues(64.dp),
                         userScrollEnabled = true,
                         verticalArrangement = Arrangement.Absolute.spacedBy(16.dp),
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),
                         state = listState
                     ) {
                         StepsAndDetails(recipe, chefImage)
