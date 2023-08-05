@@ -8,7 +8,6 @@ package details
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,36 +22,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.Recipe
-import sugar
 
 @Composable
 fun InstructionItem(recipe: Recipe, index: Int) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .border(
-                width = 2.dp,
-                color = if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
-                shape = RoundedCornerShape(35.dp)
+    Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .border(
+                    width = 2.dp,
+                    color = recipe.bgColor,
+                    shape = RoundedCornerShape(35.dp)
+                )
+        ) {
+            Text(
+                text = recipe.instructions[index],
+                style = MaterialTheme.typography.body1.copy(
+                    letterSpacing = 1.2.sp,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth().fillMaxHeight()
+                    .padding(start = 70.dp, end = 20.dp, top = 20.dp, bottom = 20.dp),
             )
-    ) {
-        Box(modifier = Modifier.graphicsLayer {
-            translationY = -25f
-        }) {
+        }
+
+        Box(
+            modifier = Modifier
+        ) {
             Box(
                 modifier = Modifier
                     .size(50.dp)
                     .shadow(elevation = 10.dp, shape = CircleShape)
                     .background(
-                        if (recipe.bgColor == sugar) Color.Companion.Black else recipe.bgColor,
+                        recipe.bgColor,
                         CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -65,7 +74,7 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                             trim = LineHeightStyle.Trim.None
                         )
                     ),
-                    color = if (recipe.bgColor == sugar) Color.Companion.White else Color.Black,
+                    color = Color.Black,
                     fontWeight = FontWeight.W600,
                     modifier = Modifier.padding(5.dp).rotate(-30f),
                     maxLines = 1,
@@ -73,15 +82,5 @@ fun InstructionItem(recipe: Recipe, index: Int) {
                 )
             }
         }
-
-        Text(
-            text = recipe.instructions[index],
-            style = MaterialTheme.typography.body1.copy(
-                letterSpacing = 1.2.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth().fillMaxHeight()
-                .padding(20.dp),
-        )
     }
 }

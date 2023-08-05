@@ -1,5 +1,7 @@
 package model
 
+import androidx.compose.ui.graphics.Color
+
 
 /**
  * Created by abdulbasit on 18/06/2023.
@@ -15,3 +17,4 @@ data class Recipe(
     val bgImageName: String,
     val bgColor: androidx.compose.ui.graphics.Color
 )
+

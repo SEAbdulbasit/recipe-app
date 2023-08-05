@@ -41,6 +41,7 @@ fun RecipeListItemImageWrapper(
             )
         )
     }
+
     LaunchedEffect(Unit) {
         rotation.animateTo(0f, animationSpec = tween(durationMillis = animationDuration))
     }
@@ -60,6 +61,7 @@ fun RecipeListItemImageWrapper(
             )
         )
     }
+
     Box(
         modifier = modifier
             .offset(x = offset.value.dp)
