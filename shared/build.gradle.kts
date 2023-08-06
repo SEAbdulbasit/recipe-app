@@ -4,11 +4,18 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
 }
-
 kotlin {
     android()
 
     jvm("desktop")
+
+    js(IR) {
+        browser()
+    }
+
+    wasm {
+        browser()
+    }
 
     iosX64()
     iosArm64()
@@ -36,6 +43,19 @@ kotlin {
                 implementation(compose.components.resources)
             }
         }
+
+        val jsWasmMain by creating {
+            dependsOn(commonMain)
+        }
+
+        val jsMain by getting {
+            dependsOn(jsWasmMain)
+        }
+
+        val wasmMain by getting {
+            dependsOn(jsWasmMain)
+        }
+
         val androidMain by getting {
             dependencies {
                 api("androidx.activity:activity-compose:1.7.2")
@@ -80,3 +100,11 @@ android {
         jvmToolchain(11)
     }
 }
+
+compose {
+    val composeVersion = project.property("compose.wasm.version") as String
+    kotlinCompilerPlugin.set(composeVersion)
+    val kotlinVersion = project.property("kotlin.version") as String
+    kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=$kotlinVersion")
+}
+
