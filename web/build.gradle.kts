@@ -18,6 +18,12 @@ val copyWasmResources = tasks.create("copyWasmResourcesWorkaround", Copy::class.
 afterEvaluate {
     project.tasks.getByName("jsProcessResources").finalizedBy(copyJsResources)
     project.tasks.getByName("wasmProcessResources").finalizedBy(copyWasmResources)
+    project.tasks.getByName("jsBrowserProductionExecutableDistributeResources").mustRunAfter(copyJsResources)
+    project.tasks.getByName("jsDevelopmentExecutableCompileSync").mustRunAfter(copyJsResources)
+    project.tasks.getByName("wasmBrowserProductionExecutableDistributeResources").mustRunAfter(copyWasmResources)
+    project.tasks.getByName("jsProductionExecutableCompileSync").mustRunAfter(copyJsResources)
+    project.tasks.getByName("wasmProductionExecutableCompileSync").mustRunAfter(copyWasmResources)
+    project.tasks.getByName("wasmDevelopmentExecutableCompileSync").mustRunAfter(copyWasmResources)
 }
 
 kotlin {
