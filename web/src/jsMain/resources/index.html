@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>recipe-app</title>
-    <script src="skiko.js"> </script>
+    <title>JetSnack with Kotlin/Wasm</title>
+    <script type="application/javascript" src="skiko.js"></script>
+    <script type="module" src="load.mjs"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            overflow: hidden;
+        }
+        ul {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+
+
+    </style>
 </head>
 <body>
 <canvas id="ComposeTarget"></canvas>
-<script src="recipe-app.js"> </script>
+<script src="recipe-app.js"></script>
 </body>
 </html>
