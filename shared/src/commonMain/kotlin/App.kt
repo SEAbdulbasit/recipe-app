@@ -31,7 +31,7 @@ fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
         val chefImage = remember { mutableStateOf<ImageBitmap?>(null) }
         LaunchedEffect(Unit) {
             withContext(Dispatchers.Default) {
-                chefImage.value = resource("chef.png").readBytes().toImageBitmap()
+                chefImage.value = resource("recipe-app/chef.png").readBytes().toImageBitmap()
             }
         }
 
