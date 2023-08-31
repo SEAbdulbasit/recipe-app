@@ -49,7 +49,6 @@ import org.jetbrains.compose.resources.resource
 import sensor.Listener
 import sensor.SensorData
 import sensor.SensorManager
-import sharedelementtransaction.SharedMaterialContainer
 import kotlin.math.PI
 
 
@@ -134,7 +133,7 @@ fun RecipeDetailsSmall(
 
     Box(
         modifier = Modifier.fillMaxSize().background(color = sugar)
-           // .nestedScroll(nestedScrollConnection)
+        // .nestedScroll(nestedScrollConnection)
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),
@@ -163,104 +162,88 @@ fun RecipeDetailsSmall(
                             RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
                         ).height(candidateHeight.dp),
                 ) {
-                    SharedMaterialContainer(
-                        key = "$recipe ",
-                        screenKey = DetailsScreen,
-                        color = recipe.bgColor,
-                        shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                        onFractionChanged = setFraction,
-                        transitionSpec = MaterialFadeInTransitionSpec
-                    ) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            backgroundImage.value?.let {
-                                Image(
-                                    bitmap = blurFilter(it, getPlatformContext()),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .offset {
-                                            animatedOffset.value
-                                        }.graphicsLayer(
-                                            scaleX = 1.050f,
-                                            scaleY = 1.050f
-                                        ),
-                                    alpha = 1 - fraction,
-                                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                                        orangeDark.copy(alpha = 0.3f)
-                                    )
-                                )
-                                Image(
-                                    bitmap = it,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier.background(
-                                        Color.Transparent,
-                                        RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                                    ).offset {
-                                        animatedOffset2.value
-
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        backgroundImage.value?.let {
+                            Image(
+                                bitmap = blurFilter(it, getPlatformContext()),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier
+                                    .offset {
+                                        animatedOffset.value
                                     }.graphicsLayer(
-                                        shadowElevation = 8f,
                                         scaleX = 1.050f,
                                         scaleY = 1.050f
                                     ),
-                                    alpha = 1 - fraction
+                                alpha = 1 - fraction,
+                                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                    orangeDark.copy(alpha = 0.3f)
                                 )
-                            }
-                            Box(
-                                modifier = Modifier.aspectRatio(1f)
-                                    .align(Alignment.Center)
-                            ) {
-                                SharedMaterialContainer(
-                                    key = recipe.image,
-                                    screenKey = "DetailsScreen",
-                                    color = Color.Transparent,
-                                    transitionSpec = FadeOutTransitionSpec
-                                ) {
-                                    Box {
-                                        Box(
-                                            modifier = Modifier
-                                                .offset {
-                                                    IntOffset(
-                                                        x = (roll * 2).dp.roundToPx(),
-                                                        y = -(pitch * 2).dp.roundToPx()
-                                                    )
-                                                }
-                                        ) {
+                            )
+                            Image(
+                                bitmap = it,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier.background(
+                                    Color.Transparent,
+                                    RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                                ).offset {
+                                    animatedOffset2.value
 
-                                            Image(
-                                                bitmap = imageBitmap,
-                                                contentDescription = null,
-                                                modifier = Modifier.aspectRatio(1f)
-                                                    .align(Alignment.Center)
-                                                    .padding(16.dp)
-                                                    .shadow(
-                                                        elevation = 16.dp,
-                                                        shape = CircleShape,
-                                                        clip = false,
-                                                        ambientColor = Color.Red,
-                                                        spotColor = Color.Red,
-                                                    ),
-                                                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                                                    orangeDark.copy(alpha = 0.0f)
-                                                )
+                                }.graphicsLayer(
+                                    shadowElevation = 8f,
+                                    scaleX = 1.050f,
+                                    scaleY = 1.050f
+                                ),
+                                alpha = 1 - fraction
+                            )
+                        }
+                        Box(
+                            modifier = Modifier.aspectRatio(1f)
+                                .align(Alignment.Center)
+                        ) {
+                            Box {
+                                Box(
+                                    modifier = Modifier
+                                        .offset {
+                                            IntOffset(
+                                                x = (roll * 2).dp.roundToPx(),
+                                                y = -(pitch * 2).dp.roundToPx()
                                             )
                                         }
+                                ) {
 
-                                        Image(
-                                            bitmap = imageBitmap,
-                                            contentDescription = null,
-                                            modifier = Modifier.aspectRatio(1f)
-                                                .align(Alignment.Center)
-                                                .padding(16.dp)
-                                                .rotate(imageRotation.value.toFloat())
-                                                .background(
-                                                    Color.Transparent,
-                                                    CircleShape,
-                                                )
+                                    Image(
+                                        bitmap = imageBitmap,
+                                        contentDescription = null,
+                                        modifier = Modifier.aspectRatio(1f)
+                                            .align(Alignment.Center)
+                                            .padding(16.dp)
+                                            .shadow(
+                                                elevation = 16.dp,
+                                                shape = CircleShape,
+                                                clip = false,
+                                                ambientColor = Color.Red,
+                                                spotColor = Color.Red,
+                                            ),
+                                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                            orangeDark.copy(alpha = 0.0f)
                                         )
-                                    }
+                                    )
                                 }
+
+                                Image(
+                                    bitmap = imageBitmap,
+                                    contentDescription = null,
+                                    modifier = Modifier.aspectRatio(1f)
+                                        .align(Alignment.Center)
+                                        .padding(16.dp)
+                                        .rotate(imageRotation.value.toFloat())
+                                        .background(
+                                            Color.Transparent,
+                                            CircleShape,
+                                        )
+                                )
                             }
                         }
                     }
