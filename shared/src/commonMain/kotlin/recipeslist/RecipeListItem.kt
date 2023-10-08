@@ -95,8 +95,7 @@ fun RecipeListItem(
                             ) {
                                 Text(
                                     recipe.title,
-                                    style = MaterialTheme.typography.h5,
-                                    fontWeight = FontWeight.W700
+                                    style = MaterialTheme.typography.h4,
                                 )
                             }
                             SharedElement(

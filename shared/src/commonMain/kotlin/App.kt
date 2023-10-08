@@ -15,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import details.RecipeDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -51,19 +52,84 @@ fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
         )
     )
     val typo = Typography(
-        h1 = TextStyle(fontFamily = rubikBold),
-        h2 = TextStyle(fontFamily = rubikBold),
-        h3 = TextStyle(fontFamily = rubikBold),
-        h4 = TextStyle(fontFamily = rubikBold),
-        h5 = TextStyle(fontFamily = rubikBold),
-        h6 = TextStyle(fontFamily = rubikSemiBold),
-        subtitle1 = TextStyle(fontFamily = rubikSemiBold),
-        subtitle2 = TextStyle(fontFamily = rubikRegular),
-        body1 = TextStyle(fontFamily = rubikRegular),
-        body2 = TextStyle(fontFamily = rubikRegular),
-        button = TextStyle(fontFamily = rubikRegular),
-        caption = TextStyle(fontFamily = rubikRegular),
-        overline = TextStyle(fontFamily = rubikRegular)
+        h1 = TextStyle(
+            fontWeight = FontWeight.Light,
+            fontSize = 45.sp,
+            letterSpacing = (-1.5).sp,
+            fontFamily = rubikBold
+        ),
+        h2 = TextStyle(
+            fontWeight = FontWeight.Light,
+            fontSize = 35.sp,
+            letterSpacing = (-0.5).sp,
+            fontFamily = rubikBold
+        ),
+        h3 = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 30.sp,
+            letterSpacing = 0.sp,
+            fontFamily = rubikBold
+        ),
+        h4 = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 25.sp,
+            letterSpacing = 0.25.sp,
+            fontFamily = rubikBold
+        ),
+        h5 = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 20.sp,
+            letterSpacing = 0.sp,
+            fontFamily = rubikBold
+        ),
+        h6 = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 20.sp,
+            letterSpacing = 0.15.sp,
+            fontFamily = rubikSemiBold
+        ),
+        subtitle1 = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            letterSpacing = 0.15.sp,
+            fontFamily = rubikSemiBold
+        ),
+        subtitle2 = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            letterSpacing = 0.1.sp,
+            fontFamily = rubikSemiBold
+        ),
+        body1 = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            letterSpacing = 0.5.sp,
+            fontFamily = rubikRegular
+        ),
+        body2 = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            letterSpacing = 0.25.sp,
+            fontFamily = rubikRegular
+        ),
+        button = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            letterSpacing = 1.25.sp,
+            fontFamily = rubikRegular
+        ),
+        caption = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp,
+            letterSpacing = 0.4.sp,
+            fontFamily = rubikRegular
+        ),
+        overline = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 10.sp,
+            letterSpacing = 1.5.sp,
+            fontFamily = rubikRegular
+        )
     )
 
     MaterialTheme(typography = typo) {
