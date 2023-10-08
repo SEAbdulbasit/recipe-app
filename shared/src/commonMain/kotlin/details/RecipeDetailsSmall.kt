@@ -133,7 +133,7 @@ fun RecipeDetailsSmall(
     val (fraction, setFraction) = remember { mutableStateOf(1f) }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(color = sugar)
+        modifier = Modifier.fillMaxSize().background(color = if (recipe.bgColor == sugar) yellow else sugar)
            // .nestedScroll(nestedScrollConnection)
     ) {
         LazyColumn(
