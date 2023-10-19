@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
@@ -94,8 +95,8 @@ fun RecipeDetailsLarge(
         animationSpec = tween(tweenDuration)
     )
 
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.Unconfined) {
+    LaunchedEffect(recipe.bgImageName) {
+        withContext(Dispatchers.Default) {
             if (recipe.bgImageName.isNotEmpty()) {
                 backgroundImage.value = resource(recipe.bgImageName).readBytes().toImageBitmap()
             }
@@ -184,7 +185,7 @@ fun RecipeDetailsLarge(
                                         }.graphicsLayer(
                                             scaleX = 1.050f,
                                             scaleY = 1.050f
-                                        ),
+                                        ).blur(radius = 5.dp),
                                     colorFilter = ColorFilter.tint(
                                         orangeDark.copy(alpha = 0.3f)
                                     )

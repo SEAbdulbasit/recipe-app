@@ -15,6 +15,6 @@ data class Recipe(
     val instructions: List<String>,
     val image: String,
     val bgImageName: String,
-    val bgColor: androidx.compose.ui.graphics.Color
+    val bgColor: Color
 )
 

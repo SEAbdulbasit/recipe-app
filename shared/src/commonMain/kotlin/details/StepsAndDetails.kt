@@ -19,7 +19,7 @@ import sharedelementtransaction.SharedElement
  * Created by abdulbasit on 29/07/2023.
  */
 
-fun LazyListScope.StepsAndDetails(
+internal fun LazyListScope.StepsAndDetails(
     recipe: Recipe,
     chefImage: ImageBitmap?
 ) {
