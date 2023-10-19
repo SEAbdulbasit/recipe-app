@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -72,10 +73,11 @@ fun RecipeDetailsLarge(
     sensorManager: SensorManager,
 ) {
     val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
+    val blurBackgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
-    val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-2f, 2f) }
-    val pitch by derivedStateOf { (sensorDataLive.value.pitch * 20).coerceIn(-2f, 2f) }
+    val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-4f, 4f) }
+    val pitch by derivedStateOf { (sensorDataLive.value.pitch * 20).coerceIn(-4f, 4f) }
     val (fraction, setFraction) = remember { mutableStateOf(1f) }
 
     val tweenDuration = 300
@@ -86,19 +88,23 @@ fun RecipeDetailsLarge(
         }
     })
 
-    val animatedOffset = animateIntOffsetAsState(
-        targetValue = IntOffset((roll * 6f).toInt(), -(pitch * 6f).toInt()),
+    val backgroundShadowOffset = animateIntOffsetAsState(
+        targetValue = IntOffset((roll * 6f).toInt(), (pitch * 6f).toInt()),
         animationSpec = tween(tweenDuration)
     )
-    val animatedOffset2 = animateIntOffsetAsState(
+    val backgroundImageOffset = animateIntOffsetAsState(
         targetValue = IntOffset(-roll.toInt(), pitch.toInt()),
         animationSpec = tween(tweenDuration)
     )
 
-    LaunchedEffect(recipe.bgImageName) {
-        withContext(Dispatchers.Default) {
+    val context = getPlatformContext()
+
+    LaunchedEffect(recipe.bgColor) {
+        withContext(Dispatchers.IO) {
             if (recipe.bgImageName.isNotEmpty()) {
-                backgroundImage.value = resource(recipe.bgImageName).readBytes().toImageBitmap()
+                val backgroundBitmap = resource(recipe.bgImageName).readBytes().toImageBitmap()
+                blurBackgroundImage.value = blurFilter(backgroundBitmap, context)
+                backgroundImage.value = backgroundBitmap
             }
         }
     }
@@ -152,7 +158,7 @@ fun RecipeDetailsLarge(
                                     sensorDataLive.value =
                                         SensorData(
                                             roll = position.x - size.value.height / 2,
-                                            pitch = position.y - size.value.width / 2
+                                            pitch = (position.y - size.value.width / 2)
                                         )
                                 }
                             }
@@ -176,16 +182,16 @@ fun RecipeDetailsLarge(
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
                                 Image(
-                                    bitmap = blurFilter(it, getPlatformContext()),
+                                    bitmap = blurBackgroundImage.value!!,
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .offset {
-                                            animatedOffset.value
-                                        }.graphicsLayer(
-                                            scaleX = 1.050f,
+                                            backgroundShadowOffset.value
+                                        }.graphicsLayer {
+                                            scaleX = 1.050f
                                             scaleY = 1.050f
-                                        ).blur(radius = 5.dp),
+                                        }.blur(radius = 8.dp),
                                     colorFilter = ColorFilter.tint(
                                         orangeDark.copy(alpha = 0.3f)
                                     )
@@ -203,13 +209,12 @@ fun RecipeDetailsLarge(
                                             ),
                                         )
                                         .offset {
-                                            animatedOffset2.value
-
-                                        }.graphicsLayer(
-                                            shadowElevation = 8f,
-                                            scaleX = 1.050f,
+                                            backgroundImageOffset.value
+                                        }.graphicsLayer {
+                                            shadowElevation = 8f
+                                            scaleX = 1.050f
                                             scaleY = 1.050f
-                                        ),
+                                        },
                                 )
                             }
 
