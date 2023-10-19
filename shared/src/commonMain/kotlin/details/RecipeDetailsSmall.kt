@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
@@ -43,6 +44,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
@@ -66,11 +70,11 @@ fun RecipeDetailsSmall(
     sensorManager: SensorManager
 ) {
     val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
+    val blurBackgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
-    val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-2f, 2f) }
-    val pitch by derivedStateOf { (sensorDataLive.value.pitch * 20).coerceIn(-2f, 2f) }
-
+    val roll by derivedStateOf { (sensorDataLive.value.roll).coerceIn(-3f, 3f) }
+    val pitch by derivedStateOf { (sensorDataLive.value.pitch).coerceIn(-2f, 2f) }
 
     val tweenDuration = 300
 
@@ -80,20 +84,24 @@ fun RecipeDetailsSmall(
         }
     })
 
-    val animatedOffset = animateIntOffsetAsState(
-        targetValue = IntOffset((roll * 6f).toInt(), -(pitch * 6f).toInt()),
+    val backgroundShadowOffset = animateIntOffsetAsState(
+        targetValue = IntOffset((roll * 6f).toInt(), (pitch * 6f).toInt()),
         animationSpec = tween(tweenDuration)
     )
-    val animatedOffset2 = animateIntOffsetAsState(
+    val backgroundImageOffset = animateIntOffsetAsState(
         targetValue = IntOffset(-roll.toInt(), pitch.toInt()),
         animationSpec = tween(tweenDuration)
     )
 
-    LaunchedEffect(Unit) {
-        try {
-            backgroundImage.value = resource(recipe.bgImageName).readBytes().toImageBitmap()
-        } catch (e: Exception) {
-            e.printStackTrace()
+    val context = getPlatformContext()
+
+    LaunchedEffect(recipe.bgColor) {
+        withContext(Dispatchers.IO) {
+            if (recipe.bgImageName.isNotEmpty()) {
+                val backgroundBitmap = resource(recipe.bgImageName).readBytes().toImageBitmap()
+                blurBackgroundImage.value = blurFilter(backgroundBitmap, context)
+                backgroundImage.value = backgroundBitmap
+            }
         }
     }
 
@@ -133,8 +141,9 @@ fun RecipeDetailsSmall(
     val (fraction, setFraction) = remember { mutableStateOf(1f) }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(color = if (recipe.bgColor == sugar) yellow else sugar)
-           // .nestedScroll(nestedScrollConnection)
+        modifier = Modifier.fillMaxSize()
+            .background(color = if (recipe.bgColor == sugar) yellow else sugar)
+        // .nestedScroll(nestedScrollConnection)
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),
@@ -174,17 +183,16 @@ fun RecipeDetailsSmall(
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
                                 Image(
-                                    bitmap = blurFilter(it, getPlatformContext()),
+                                    bitmap = blurBackgroundImage.value!!,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
                                         .offset {
-                                            animatedOffset.value
-                                        }.graphicsLayer(
-                                            scaleX = 1.050f,
+                                            backgroundShadowOffset.value
+                                        }.graphicsLayer {
+                                            scaleX = 1.050f
                                             scaleY = 1.050f
-                                        ),
-                                    alpha = 1 - fraction,
+                                        }.blur(radius = 8.dp),
                                     colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
                                         orangeDark.copy(alpha = 0.3f)
                                     )
@@ -197,16 +205,17 @@ fun RecipeDetailsSmall(
                                         Color.Transparent,
                                         RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
                                     ).offset {
-                                        animatedOffset2.value
-
-                                    }.graphicsLayer(
-                                        shadowElevation = 8f,
-                                        scaleX = 1.050f,
+                                        backgroundImageOffset.value
+                                    }.graphicsLayer {
+                                        shadowElevation = 8f
+                                        scaleX = 1.050f
                                         scaleY = 1.050f
-                                    ),
+                                    },
                                     alpha = 1 - fraction
                                 )
                             }
+
+                            // box and shadow
                             Box(
                                 modifier = Modifier.aspectRatio(1f)
                                     .align(Alignment.Center)
