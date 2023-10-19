@@ -15,6 +15,7 @@ data class Recipe(
     val instructions: List<String>,
     val image: String,
     val bgImageName: String,
+    val bgImageNameLarge: String="",
     val bgColor: Color
 )
 

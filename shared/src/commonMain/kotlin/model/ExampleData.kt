@@ -37,6 +37,7 @@ val recipesList = listOf(
         ),
         image = "01-lemon-cheesecake.png",
         bgImageName = "01-lemon-cheesecake-bg.png",
+        bgImageNameLarge = "01-lemon-cheesecake-bg-lg.png",
         bgColor = Color(0xffFFEF7D),
     ),
     Recipe(
