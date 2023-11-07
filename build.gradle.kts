@@ -1,3 +1,5 @@
+import org.jetbrains.compose.ComposeExtension
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -17,14 +19,12 @@ allprojects {
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     }
 
-    configurations.all {
-        val conf = this
-        // Currently it's necessary to make the android build work properly
-        conf.resolutionStrategy.eachDependency {
-            if (requested.module.name.startsWith("kotlin-stdlib")) {
-                val kotlinVersion = project.property("kotlin.version") as String
-                useVersion(kotlinVersion)
-            }
+    afterEvaluate {
+        extensions.findByType(ComposeExtension::class.java)?.apply {
+            val composeCompilerVersion = project.property("compose.compiler.version") as String
+            kotlinCompilerPlugin.set(composeCompilerVersion)
+            val kotlinVersion = project.property("kotlin.version") as String
+            kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=$kotlinVersion")
         }
     }
 }
