@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+//import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -53,7 +53,6 @@ import org.jetbrains.compose.resources.resource
 import sensor.Listener
 import sensor.SensorData
 import sensor.SensorManager
-import sharedelementtransaction.SharedMaterialContainer
 import kotlin.math.PI
 
 
@@ -96,7 +95,7 @@ fun RecipeDetailsSmall(
     val context = getPlatformContext()
 
     LaunchedEffect(recipe.bgColor) {
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             if (recipe.bgImageName.isNotEmpty()) {
                 val backgroundBitmap = resource(recipe.bgImageName).readBytes().toImageBitmap()
                 blurBackgroundImage.value = blurFilter(backgroundBitmap, context)
@@ -172,14 +171,14 @@ fun RecipeDetailsSmall(
                             RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
                         ).height(candidateHeight.dp),
                 ) {
-                    SharedMaterialContainer(
-                        key = "$recipe ",
-                        screenKey = DetailsScreen,
-                        color = recipe.bgColor,
-                        shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                        onFractionChanged = setFraction,
-                        transitionSpec = MaterialFadeInTransitionSpec
-                    ) {
+//                    SharedMaterialContainer(
+//                        key = "$recipe ",
+//                        screenKey = DetailsScreen,
+//                        color = recipe.bgColor,
+//                        shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+//                        onFractionChanged = setFraction,
+//                        transitionSpec = MaterialFadeInTransitionSpec
+//                    ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             backgroundImage.value?.let {
                                 Image(
@@ -220,12 +219,12 @@ fun RecipeDetailsSmall(
                                 modifier = Modifier.aspectRatio(1f)
                                     .align(Alignment.Center)
                             ) {
-                                SharedMaterialContainer(
-                                    key = recipe.image,
-                                    screenKey = "DetailsScreen",
-                                    color = Color.Transparent,
-                                    transitionSpec = FadeOutTransitionSpec
-                                ) {
+//                                SharedMaterialContainer(
+//                                    key = recipe.image,
+//                                    screenKey = "DetailsScreen",
+//                                    color = Color.Transparent,
+//                                    transitionSpec = FadeOutTransitionSpec
+//                                ) {
                                     Box {
                                         Box(
                                             modifier = Modifier
@@ -269,10 +268,10 @@ fun RecipeDetailsSmall(
                                                 )
                                         )
                                     }
-                                }
+                     //           }
                             }
                         }
-                    }
+           //         }
                 }
             }
 
