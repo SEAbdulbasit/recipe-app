@@ -153,7 +153,10 @@ fun RecipeDetailsLarge(
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize().background(
+                            shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
+                            color = recipe.bgColor
+                        )
                 ) {
 //                    SharedMaterialContainer(
 //                        key = "$recipe ",
@@ -285,16 +288,13 @@ fun RecipeDetailsLarge(
 @Composable
 fun BackButton(goBack: () -> Unit, fraction: Float) {
     Box(
-        modifier = Modifier.padding(start = 32.dp, top = 16.dp).alpha(
-            alpha = if (fraction <= 0) 1f else 0f,
+        modifier = Modifier.padding(start = 32.dp, top = 16.dp).clip(
+            RoundedCornerShape(50)
         )
-            .clip(
-                RoundedCornerShape(50)
-            )
             .clickable {
                 goBack()
             }.background(
-                color = Color.White,
+                color = Color.Black,
                 shape = RoundedCornerShape(50)
             ).padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
     ) {
@@ -302,11 +302,11 @@ fun BackButton(goBack: () -> Unit, fraction: Float) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = null,
-                tint = Color.Black,
+                tint = Color.White,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(Modifier.padding(start = 8.dp))
-            Text(text = "Back to Recipes", style = MaterialTheme.typography.subtitle2)
+            Text(text = "Back to Recipes", style = MaterialTheme.typography.subtitle2, color = Color.White)
         }
     }
 }
