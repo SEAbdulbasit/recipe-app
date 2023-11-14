@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -85,7 +84,7 @@ fun RecipeDetailsLarge(
     val context = getPlatformContext()
 
     LaunchedEffect(recipe.bgImageNameLarge) {
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Unconfined) {
             if (recipe.bgImageNameLarge.isNotEmpty()) {
                 val backgroundBitmap = resource(recipe.bgImageNameLarge).readBytes().toImageBitmap()
                 blurBackgroundImage.value = blurFilter(backgroundBitmap, context)

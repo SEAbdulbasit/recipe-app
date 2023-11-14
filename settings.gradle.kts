@@ -1,8 +1,9 @@
-rootProject.name = "Recipe App KMP"
+rootProject.name = "RecipeAppKMP"
 
 include(":androidApp")
 include(":shared")
 include(":desktopApp")
+include(":webApp")
 
 pluginManagement {
     repositories {
@@ -15,7 +16,7 @@ pluginManagement {
     plugins {
         val kotlinVersion = extra["kotlin.version"] as String
         val agpVersion = extra["agp.version"] as String
-        val composeVersion = extra["compose.version"] as String
+        val composeVersion = extra["compose.wasm.version"] as String
 
         kotlin("jvm").version(kotlinVersion)
         kotlin("multiplatform").version(kotlinVersion)

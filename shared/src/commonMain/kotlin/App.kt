@@ -132,7 +132,7 @@ fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
         )
     )
 
-    MaterialTheme(typography = typo) {
+    MaterialTheme {
         val items by remember { mutableStateOf(recipesList) }
         var width by remember { mutableStateOf(0) }
         var currentScreen by remember { mutableStateOf<Screens>(Screens.RecipesList) }
