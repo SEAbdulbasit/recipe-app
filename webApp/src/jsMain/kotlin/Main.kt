@@ -6,7 +6,7 @@ import sensor.SensorManager
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     CanvasBasedWindow("RecipeApp") {
-//        val sensorManager = SensorManager()
-//        App(sensorManager)
+        val sensorManager = SensorManager()
+        App(sensorManager)
     }
 }

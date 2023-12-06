@@ -84,7 +84,7 @@ fun RecipeDetailsLarge(
     val context = getPlatformContext()
 
     LaunchedEffect(recipe.bgImageNameLarge) {
-        withContext(Dispatchers.Unconfined) {
+        withContext(Dispatchers.Default) {
             if (recipe.bgImageNameLarge.isNotEmpty()) {
                 val backgroundBitmap = resource(recipe.bgImageNameLarge).readBytes().toImageBitmap()
                 blurBackgroundImage.value = blurFilter(backgroundBitmap, context)

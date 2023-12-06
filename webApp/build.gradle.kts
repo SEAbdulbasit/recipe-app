@@ -5,22 +5,23 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-val copyWasmResources = tasks.create("copyWasmResourcesWorkaround", Copy::class.java) {
-    from(project(":shared").file("src/commonMain/resources"))
-    into("build/processedResources/wasmJs/main")
-}
-
 val copyJsResources = tasks.create("copyJsResourcesWorkaround", Copy::class.java) {
     from(project(":shared").file("src/commonMain/resources"))
     into("build/processedResources/js/main")
 }
 
+val copyWasmResources = tasks.create("copyWasmResourcesWorkaround", Copy::class.java) {
+    from(project(":shared").file("src/commonMain/resources"))
+    into("build/processedResources/wasmJs/main")
+}
+
 afterEvaluate {
     project.tasks.getByName("jsProcessResources").finalizedBy(copyJsResources)
-   // project.tasks.getByName("wasmJsProcessResources").finalizedBy(copyWasmResources)
+    project.tasks.getByName("wasmJsProcessResources").finalizedBy(copyWasmResources)
+
     project.tasks.getByName("jsBrowserProductionExecutableDistributeResources").mustRunAfter(copyJsResources)
     project.tasks.getByName("jsDevelopmentExecutableCompileSync").mustRunAfter(copyJsResources)
-    //project.tasks.getByName("wasmBrowserProductionExecutableDistributeResources").mustRunAfter(copyWasmResources)
+    project.tasks.getByName("wasmJsDevelopmentExecutableCompileSync").mustRunAfter(copyWasmResources)
     project.tasks.getByName("jsProductionExecutableCompileSync").mustRunAfter(copyJsResources)
     //project.tasks.getByName("wasmProductionExecutableCompileSync").mustRunAfter(copyWasmResources)
     //project.tasks.getByName("wasmDevelopmentExecutableCompileSync").mustRunAfter(copyWasmResources)

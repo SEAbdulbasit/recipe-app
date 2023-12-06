@@ -2,12 +2,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -18,12 +13,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import details.RecipeDetails
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import recipeslist.RecipesListScreen
 import sensor.SensorManager
+
 //import sharedelementtransaction.FadeMode
 //import sharedelementtransaction.MaterialArcMotionFactory
 //import sharedelementtransaction.MaterialContainerTransformSpec
@@ -35,22 +32,25 @@ import sensor.SensorManager
 @Composable
 fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
 
-    val rubikRegular = FontFamily(
-        font(
-            "Rubik", "rubik_regular", FontWeight.Normal, FontStyle.Normal
-        )
-    )
+    var rubikRegular by remember { mutableStateOf<FontFamily?>(null) }
+    var rubikSemiBold by remember { mutableStateOf<FontFamily?>(null) }
+    var rubikBold by remember { mutableStateOf<FontFamily?>(null) }
+    val platformContext = getPlatformContext()
 
-    val rubikSemiBold = FontFamily(
-        font(
-            "Rubik", "rubik_medium", FontWeight.SemiBold, FontStyle.Normal
-        )
-    )
-    val rubikBold = FontFamily(
-        font(
-            "Rubik", "rubik_bold", FontWeight.Bold, FontStyle.Normal
-        )
-    )
+    LaunchedEffect(Unit) {
+        launch(Dispatchers.Unconfined) {
+            rubikRegular =
+                FontFamily(font("Rubik", "rubik_regular", FontWeight.Normal, FontStyle.Normal, platformContext))
+        }
+        launch(Dispatchers.Unconfined) {
+            rubikSemiBold =
+                FontFamily(font("Rubik", "rubik_medium", FontWeight.SemiBold, FontStyle.Normal, platformContext))
+        }
+        launch(Dispatchers.Unconfined) {
+            rubikBold = FontFamily(font("Rubik", "rubik_bold", FontWeight.Bold, FontStyle.Normal, platformContext))
+        }
+    }
+
     val typo = Typography(
         h1 = TextStyle(
             fontWeight = FontWeight.Light,
@@ -132,22 +132,23 @@ fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
         )
     )
 
-    MaterialTheme {
-        val items by remember { mutableStateOf(recipesList) }
-        var width by remember { mutableStateOf(0) }
-        var currentScreen by remember { mutableStateOf<Screens>(Screens.RecipesList) }
-        var updateIds by remember { mutableStateOf("") }
+    if (rubikRegular != null && rubikBold != null && rubikSemiBold != null) {
+        MaterialTheme(typography = typo) {
+            val items by remember { mutableStateOf(recipesList) }
+            var width by remember { mutableStateOf(0) }
+            var currentScreen by remember { mutableStateOf<Screens>(Screens.RecipesList) }
+            var updateIds by remember { mutableStateOf("") }
 
-        val chefImage = remember { mutableStateOf<ImageBitmap?>(null) }
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.Default) {
-                chefImage.value = resource("chef.png").readBytes().toImageBitmap()
+            val chefImage = remember { mutableStateOf<ImageBitmap?>(null) }
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.Default) {
+                    chefImage.value = resource("chef.png").readBytes().toImageBitmap()
+                }
             }
-        }
 
-        Box(modifier = Modifier.fillMaxSize().onGloballyPositioned {
-            width = it.size.width
-        })
+            Box(modifier = Modifier.fillMaxSize().onGloballyPositioned {
+                width = it.size.width
+            })
 
 //        SharedElementsRoot {
 //            val sharedTransaction = this
@@ -193,7 +194,8 @@ fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
                     }
                 }
             }
-        //}
+            //}
+        }
     }
 }
 

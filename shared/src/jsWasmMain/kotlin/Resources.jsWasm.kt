@@ -7,10 +7,6 @@ import org.jetbrains.compose.resources.resource
 /**
  * Created by abdulbasit on 08/10/2023.
  */
-
-private val cache: MutableMap<String, Font> = mutableMapOf()
-
-
 @OptIn(ExperimentalResourceApi::class)
 actual suspend fun font(
     name: String,
@@ -19,8 +15,10 @@ actual suspend fun font(
     style: FontStyle,
     context: PlatformContext
 ): Font {
-    return cache.getOrPut(res) {
-        val byteArray = resource("font/$res.ttf").readBytes()
-        androidx.compose.ui.text.platform.Font(res, byteArray, weight, style)
-    }
+    return androidx.compose.ui.text.platform.Font(
+        identity = name,
+        data = resource("font/$res.ttf").readBytes(),
+        weight = weight,
+        style = style
+    )
 }

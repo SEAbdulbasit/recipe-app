@@ -1,5 +1,3 @@
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -8,14 +6,13 @@ import androidx.compose.ui.text.font.FontWeight
  * Created by abdulbasit on 08/10/2023.
  */
 
-@Composable
-actual fun font(
+actual suspend fun font(
     name: String,
     res: String,
     weight: FontWeight,
-    style: FontStyle
+    style: FontStyle,
+    context: PlatformContext
 ): Font {
-    val context = LocalContext.current
-    val id = context.resources.getIdentifier(res, "font", context.packageName)
+    val id = context.androidContext.resources.getIdentifier(res, "font", context.androidContext.packageName)
     return Font(id, weight, style)
 }
