@@ -10,11 +10,9 @@ import red
 import sugar
 import yellow
 
-
 /**
  * Created by abdulbasit on 18/06/2023.
  */
-
 
 val recipesList = listOf(
     Recipe(

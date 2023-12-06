@@ -21,9 +21,9 @@ afterEvaluate {
 
     project.tasks.getByName("jsBrowserProductionExecutableDistributeResources").mustRunAfter(copyJsResources)
     project.tasks.getByName("jsDevelopmentExecutableCompileSync").mustRunAfter(copyJsResources)
-    project.tasks.getByName("wasmJsDevelopmentExecutableCompileSync").mustRunAfter(copyWasmResources)
+    //project.tasks.getByName("wasmJsDevelopmentExecutableCompileSync").mustRunAfter(copyWasmResources)
     project.tasks.getByName("jsProductionExecutableCompileSync").mustRunAfter(copyJsResources)
-    //project.tasks.getByName("wasmProductionExecutableCompileSync").mustRunAfter(copyWasmResources)
+    project.tasks.getByName("wasmJsProductionExecutableCompileSync").mustRunAfter(copyWasmResources)
     //project.tasks.getByName("wasmDevelopmentExecutableCompileSync").mustRunAfter(copyWasmResources)
 }
 
