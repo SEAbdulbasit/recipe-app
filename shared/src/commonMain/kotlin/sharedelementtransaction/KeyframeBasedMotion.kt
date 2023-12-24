@@ -3,7 +3,7 @@ package sharedelementtransaction
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 
-abstract class KeyframeBasedMotion : PathMotion {
+abstract class KeyframeBasedMotion : PathMotion(2) {
 
     private var start = Offset.Unspecified
     private var end = Offset.Unspecified
@@ -14,7 +14,8 @@ abstract class KeyframeBasedMotion : PathMotion {
     private fun LongArray.getOffset(index: Int) =
         @Suppress("INVISIBLE_MEMBER") Offset(get(index))
 
-    override fun invoke(start: Offset, end: Offset, fraction: Float): Offset {
+
+     override fun invoke(start: Offset, end: Offset, fraction: Float): Offset {
         var frac = fraction
         if (start != this.start || end != this.end) {
             if (start == this.end && end == this.start) {
