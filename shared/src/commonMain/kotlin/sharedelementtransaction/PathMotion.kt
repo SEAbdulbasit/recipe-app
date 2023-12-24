@@ -1,12 +1,13 @@
-//package sharedelementtransaction
-//
-//import androidx.compose.ui.geometry.Offset
-//import androidx.compose.ui.geometry.lerp
-//
-//typealias PathMotion = (start: Offset, end: Offset, fraction: Float) -> Offset
-//
-//typealias PathMotionFactory = () -> PathMotion
-//
-//val LinearMotion: PathMotion = ::lerp
-//
-//val LinearMotionFactory: PathMotionFactory = { LinearMotion }
+package sharedelementtransaction
+
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.lerp
+
+ open class PathMotion(val a:Int) {
+    open operator fun invoke(start: Offset, end: Offset, fraction: Float) = lerp(start, end, fraction)
+}
+typealias PathMotionFactory = () -> PathMotion
+
+val LinearMotion: PathMotion = PathMotion(2)
+
+val LinearMotionFactory: PathMotionFactory = { LinearMotion }
