@@ -13,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +25,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -40,11 +38,9 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
+import org.jetbrains.compose.resources.painterResource
 import sensor.Listener
 import sensor.SensorData
 import sensor.SensorManager
@@ -56,13 +52,9 @@ import kotlin.math.PI
 @Composable
 fun RecipeDetailsLarge(
     recipe: Recipe,
-    imageBitmap: ImageBitmap,
-    chefImage: ImageBitmap?,
     goBack: () -> Unit,
     sensorManager: SensorManager,
 ) {
-    val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
-    val blurBackgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
     val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-4f, 4f) }
@@ -87,16 +79,6 @@ fun RecipeDetailsLarge(
     )
 
     val context = getPlatformContext()
-
-    LaunchedEffect(recipe.bgImageNameLarge) {
-        withContext(Dispatchers.Default) {
-            if (recipe.bgImageNameLarge.isNotEmpty()) {
-                val backgroundBitmap = resource(recipe.bgImageNameLarge).readBytes().toImageBitmap()
-                blurBackgroundImage.value = blurFilter(backgroundBitmap, context)
-                backgroundImage.value = backgroundBitmap
-            }
-        }
-    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -165,9 +147,10 @@ fun RecipeDetailsLarge(
                 ) {
                     // background image + its shadow
                     Box(modifier = Modifier.fillMaxSize()) {
-                        backgroundImage.value?.let {
+                        if (recipe.bgImageLarge != null) {
+                            val painter = painterResource(recipe.bgImageLarge)
                             Image(
-                                bitmap = blurBackgroundImage.value!!,
+                                painter = painter,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -181,8 +164,9 @@ fun RecipeDetailsLarge(
                                     orangeDark.copy(alpha = 0.3f)
                                 )
                             )
+
                             Image(
-                                bitmap = it,
+                                painter = painter,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -203,7 +187,6 @@ fun RecipeDetailsLarge(
                             )
                         }
 
-
                         // image shadows and image
                         Box(
                             modifier = Modifier.aspectRatio(1f).padding(32.dp)
@@ -217,7 +200,7 @@ fun RecipeDetailsLarge(
                             ) {
                                 Box(modifier = Modifier.padding(32.dp)) {
                                     Image(
-                                        bitmap = imageBitmap,
+                                        painter = painterResource(recipe.image),
                                         contentDescription = null,
                                         modifier = Modifier.aspectRatio(1f)
                                             .align(Alignment.Center)
@@ -273,7 +256,7 @@ fun RecipeDetailsLarge(
                         modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection),
                         state = listState
                     ) {
-                        StepsAndDetails(recipe, chefImage)
+                        StepsAndDetails(recipe)
                     }
                 }
             }

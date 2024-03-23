@@ -4,8 +4,10 @@ import androidx.compose.ui.graphics.Color
 import green
 import honey
 import orangeDark
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import pinkLight
 import primary
+import recipeappkmp.shared.generated.resources.Res
 import red
 import sugar
 import yellow
@@ -14,6 +16,7 @@ import yellow
  * Created by abdulbasit on 18/06/2023.
  */
 
+@OptIn(ExperimentalResourceApi::class)
 val recipesList = listOf(
     Recipe(
         id = 1,
@@ -33,9 +36,9 @@ val recipesList = listOf(
             " Line the base of a 20 cm loose bottomed cake tin with baking parchment.Press the biscuit into the bottom of the tin and chill in the fridge while making the topping.",
             " Beat together the mascarpone, caster sugar, lemon zest and juice, until smooth and creamy . Spread over the base and chillfor a couple of hours .",
         ),
-        image = "01-lemon-cheesecake.png",
-        bgImageName = "01-lemon-cheesecake-bg.png",
-        bgImageNameLarge = "01-lemon-cheesecake-bg-lg.png",
+        image = Res.drawable._01_lemon_cheesecake,
+        bgImage = Res.drawable._01_lemon_cheesecake_bg,
+        bgImageLarge = Res.drawable._01_lemon_cheesecake_bg_lg,
         bgColor = Color(0xffFFEF7D),
     ),
     Recipe(
@@ -70,8 +73,8 @@ val recipesList = listOf(
             "Add a dollop of buttercream to one macaron shell. Top it with another macaron shell to create a sandwich. Repeat with remaining macaron shells and buttercream.",
             "Place in an airtight container for 24 hours to “bloom”.",
         ),
-        image = "05-macaroons.png",
-        bgImageName = "",
+        image = Res.drawable._05_macaroons,
+        bgImage = null,
         bgColor = primary,
     ),
     Recipe(
@@ -83,8 +86,7 @@ val recipesList = listOf(
             "",
         ),
         instructions = listOf(),
-        image = "08-cream-cupcakes.png",
-        bgImageName = "",
+        image = Res.drawable._08_cream_cupcakes,
         bgColor = pinkLight,
     ),
     Recipe(
@@ -107,8 +109,7 @@ val recipesList = listOf(
             "To make the cheesecake, melt the chocolate in short bursts in the microwave, then leave to cool slightly. Whip the cream in a large bowl using an electric whisk until soft peaks form, then fold in the cocoa powder. Beat the cream cheese and sugar together, then fold in the cream mixture and the cooled chocolate.",
             "Spoon the cheesecake mixture over the biscuit base, levelling it out with the back of a spoon. Transfer to the freezer and freeze for 2 hrs, or until set. Remove from the tin and leave at room temperature to soften for about 20 mins before serving.",
         ),
-        image = "02-chocolate-cake-1.png",
-        bgImageName = "",
+        image = Res.drawable._02_chocolate_cake_1,
         bgColor = orangeDark,
     ),
     Recipe(
@@ -117,8 +118,7 @@ val recipesList = listOf(
         description = "Melons - they're firmer so make a great base for the softer berries and fruits.Tropical fruit -the top of a pineapple can be included for height,while dragonfruit looks vibrant.",
         ingredients = listOf(""),
         instructions = listOf(""),
-        image = "09-fruit-plate.png",
-        bgImageName = "",
+        image = Res.drawable._09_fruit_plate,
         bgColor = green,
     ),
     Recipe(
@@ -148,8 +148,8 @@ val recipesList = listOf(
             "Make the chocolate glaze= Melt the chocolate, heavy cream, and butter gently in the microwave (in 30-second intervals, stirring in between) or a double boiler until smooth. Dip the tops of the donuts into the chocolate glaze, and place on a cooling rack to set.",
             "Donuts are best eaten the same day or keep them for up to 3 days in the refrigerator.",
         ),
-        image = "03-chocolate-donuts.png",
-        bgImageName = "",
+        image = Res.drawable._03_chocolate_donuts,
+        bgImage = null,
         bgColor = sugar,
     ),
     Recipe(
@@ -163,8 +163,7 @@ val recipesList = listOf(
         instructions = listOf(
             "",
         ),
-        image = "13-strawberry-powdered-cake.png",
-        bgImageName = "",
+        image = Res.drawable._13_strawberry_powdered_cake,
         bgColor = red,
     ),
     Recipe(
@@ -194,8 +193,8 @@ val recipesList = listOf(
             "Cool the cakes in their pans on a wire rack for 10 minutes, then loosen the edges by running a knife along the sides of the pan. Turn the cakes out onto the racks and cool for at least 1 hour before frosting.",
             "Frost with your choice of frosting and enjoy.",
         ),
-        image = "04-fluffy-cake.png",
-        bgImageName = "",
+        image = Res.drawable._04_fluffy_cake,
+        bgImage = null,
         bgColor = orangeDark,
     ),
     Recipe(
@@ -229,8 +228,8 @@ val recipesList = listOf(
             "To make Frosting= In a medium bowl, combine 6 ounces white chocolate, 2 1/2 tablespoons flour and 1 cup milk. Cook over medium heat, stirring constantly, until mixture is very thick. Cool completely.",
             "In large bowl, cream 1 cup butter, 1 cup sugar and 1 teaspoon vanilla; beat until light and fluffy. Gradually add cooled white chocolate mixture. Beat at high speed until it is the consistency of whipped cream. Spread between layers, on top and sides of cake.",
         ),
-        image = "06-white-cream-cake.png",
-        bgImageName = "",
+        image = Res.drawable._06_white_cream_cake,
+        bgImage = null,
         bgColor = sugar,
     ),
     Recipe(
@@ -244,8 +243,8 @@ val recipesList = listOf(
         instructions = listOf(
             "",
         ),
-        image = "14-fruit-pie.png",
-        bgImageName = "",
+        image = Res.drawable._14_fruit_pie,
+        bgImage = null,
         bgColor = yellow,
     ),
     Recipe(
@@ -280,68 +279,66 @@ val recipesList = listOf(
             "Place a cake layer on a parchment paper round on a pizza pan or serving plate. Spread a cup of frosting evenly on top, almost to the edge. Repeat with cake layers and frosting, pressing layers in smooth-side down. Place last cake layer smooth-side up. Frost top and sides of cake. Cover with crumbs; clean any excess crumbs around base.",
             "Cover with plastic wrap and refrigerate for at least 8 hours to overnight. Transfer to a cake stand using 2 spatulas. Cut and serve.",
         ),
-        image = "07-honey-cake.png",
-        bgImageName = "",
+        image = Res.drawable._07_honey_cake,
+        bgImage = null,
         bgColor = honey,
     ),
-    Recipe(
-        id = 12,
-        title = "Powdered Cake",
-        description =
-        "Heavy on the butter and nutmeg, this cake has all the flavors of your favorite cake donut in a convenient square shape.",
-        ingredients = listOf(
-            "",
-        ),
-        instructions = listOf(
-            "",
-        ),
-        image = "11-powdered-cake.png",
-        bgImageName = "",
-        bgColor = sugar,
-    ),
-    Recipe(
-        id = 13,
-        title = "Strawberries",
-        description =
-        "We' ll admit it = we go a little crazy during strawberry season.Though easy to grow, these sweet berries just taste better when you get them in season, as opposed to buying them at other times of the year.",
-        ingredients = listOf(
-            "",
-        ),
-        instructions = listOf(
-            "",
-        ),
-        image = "10-strawberries.png",
-        bgImageName = "",
-        bgColor = red,
-    ),
-    Recipe(
-        id = 14,
-        title = "Chocolate Cake",
-        description =
-        "The Best Chocolate Cake Recipe – A one bowl chocolate cake recipe that is quick, easy, and delicious! Updated with gluten-free, dairy-free, and egg-free options!",
-        ingredients = listOf(
-            "",
-        ),
-        instructions = listOf(
-            "",
-        ),
-        image = "12-chocolate-cake-2.png",
-        bgImageName = "",
-        bgColor = orangeDark,
-    ),
-    Recipe(
-        id = 15,
-        title = "Apple Pie",
-        description =
-        "This was my grandmother' s apple pie recipe.I have never seen another one quite like it.It will always be my favorite and has won me several first place prizes in local competitions.",
-        ingredients = listOf(
-            "",
-        ),
-        instructions = listOf(
-            "",
-        ),
-        image = "15-apple-pie.png",
-        bgImageName = "",
-        bgColor = sugar,
-    )
+//    Recipe(
+//        id = 12,
+//        title = "Powdered Cake",
+//        description =
+//        "Heavy on the butter and nutmeg, this cake has all the flavors of your favorite cake donut in a convenient square shape.",
+//        ingredients = listOf(
+//            "",
+//        ),
+//        instructions = listOf(
+//            "",
+//        ),
+//        image = "11-powdered-cake.png",
+//        bgImageName = null,
+//        bgColor = sugar,
+//    ),
+//    Recipe(
+//        id = 13,
+//        title = "Strawberries",
+//        description =
+//        "We' ll admit it = we go a little crazy during strawberry season.Though easy to grow, these sweet berries just taste better when you get them in season, as opposed to buying them at other times of the year.",
+//        ingredients = listOf(
+//            "",
+//        ),
+//        instructions = listOf(
+//            "",
+//        ),
+//        image = "10-strawberries.png",
+//        bgImageName = null,
+//        bgColor = red,
+//    ),
+//    Recipe(
+//        id = 14,
+//        title = "Chocolate Cake",
+//        description =
+//        "The Best Chocolate Cake Recipe – A one bowl chocolate cake recipe that is quick, easy, and delicious! Updated with gluten-free, dairy-free, and egg-free options!",
+//        ingredients = listOf(
+//            "",
+//        ),
+//        instructions = listOf(
+//            "",
+//        ),
+//        image = "12-chocolate-cake-2.png",
+//        bgColor = orangeDark,
+//    ),
+//    Recipe(
+//        id = 15,
+//        title = "Apple Pie",
+//        description =
+//        "This was my grandmother' s apple pie recipe.I have never seen another one quite like it.It will always be my favorite and has won me several first place prizes in local competitions.",
+//        ingredients = listOf(
+//            "",
+//        ),
+//        instructions = listOf(
+//            "",
+//        ),
+//        image = "15-apple-pie.png",
+//        bgColor = sugar,
+//    )
 )

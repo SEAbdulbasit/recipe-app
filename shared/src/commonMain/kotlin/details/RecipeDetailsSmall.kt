@@ -13,7 +13,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -33,11 +31,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import details.StepsAndDetails
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
+import org.jetbrains.compose.resources.painterResource
 import sensor.Listener
 import sensor.SensorData
 import sensor.SensorManager
@@ -52,13 +48,9 @@ import kotlin.math.PI
 @Composable
 fun RecipeDetailsSmall(
     recipe: Recipe,
-    imageBitmap: ImageBitmap,
-    chefImage: ImageBitmap?,
     goBack: () -> Unit,
     sensorManager: SensorManager
 ) {
-    val backgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
-    val blurBackgroundImage = remember { mutableStateOf<ImageBitmap?>(null) }
     val imageRotation = remember { mutableStateOf(0) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
     val roll by derivedStateOf { (sensorDataLive.value.roll).coerceIn(-3f, 3f) }
@@ -82,16 +74,6 @@ fun RecipeDetailsSmall(
     )
 
     val context = getPlatformContext()
-
-    LaunchedEffect(recipe.bgColor) {
-        withContext(Dispatchers.Default) {
-            if (recipe.bgImageName.isNotEmpty()) {
-                val backgroundBitmap = resource(recipe.bgImageName).readBytes().toImageBitmap()
-                blurBackgroundImage.value = blurFilter(backgroundBitmap, context)
-                backgroundImage.value = backgroundBitmap
-            }
-        }
-    }
 
     val toolbarOffsetHeightPx = remember { mutableStateOf(340f) }
     val nestedScrollConnection = remember {
@@ -169,9 +151,9 @@ fun RecipeDetailsSmall(
                         transitionSpec = MaterialFadeInTransitionSpec
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            backgroundImage.value?.let {
+                            recipe.bgImage?.let { painterResource(it) }?.let {
                                 Image(
-                                    bitmap = blurBackgroundImage.value!!,
+                                    painter = it,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
@@ -185,86 +167,86 @@ fun RecipeDetailsSmall(
                                         orangeDark.copy(alpha = 0.3f)
                                     )
                                 )
-                                Image(
-                                    bitmap = it,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier.background(
-                                        Color.Transparent,
-                                        RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                                    ).offset {
-                                        backgroundImageOffset.value
-                                    }.graphicsLayer {
-                                        shadowElevation = 8f
-                                        scaleX = 1.050f
-                                        scaleY = 1.050f
-                                    },
-                                    alpha = 1 - fraction
-                                )
                             }
+                            Image(
+                                painter = painterResource(recipe.image),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier.background(
+                                    Color.Transparent,
+                                    RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                                ).offset {
+                                    backgroundImageOffset.value
+                                }.graphicsLayer {
+                                    shadowElevation = 8f
+                                    scaleX = 1.050f
+                                    scaleY = 1.050f
+                                },
+                                alpha = 1 - fraction
+                            )
+                        }
+                    }
 
-                            // box and shadow
-                            Box(
-                                modifier = Modifier.aspectRatio(1f)
-                                    .align(Alignment.Center)
-                            ) {
-                                SharedMaterialContainer(
-                                    key = recipe.image,
-                                    screenKey = "DetailsScreen",
-                                    color = Color.Transparent,
-                                    transitionSpec = FadeOutTransitionSpec
-                                ) {
-                                    Box {
-                                        Box(
-                                            modifier = Modifier
-                                                .offset {
-                                                    IntOffset(
-                                                        x = (roll * 2).dp.roundToPx(),
-                                                        y = -(pitch * 2).dp.roundToPx()
-                                                    )
-                                                }
-                                        ) {
-
-                                            Image(
-                                                bitmap = imageBitmap,
-                                                contentDescription = null,
-                                                modifier = Modifier.aspectRatio(1f)
-                                                    .align(Alignment.Center)
-                                                    .padding(16.dp)
-                                                    .shadow(
-                                                        elevation = 16.dp,
-                                                        shape = CircleShape,
-                                                        clip = false,
-                                                        ambientColor = Color.Red,
-                                                        spotColor = Color.Red,
-                                                    ),
-                                                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                                                    orangeDark.copy(alpha = 0.0f)
-                                                )
+                    // box and shadow
+                    Box(
+                        modifier = Modifier.aspectRatio(1f)
+                            .align(Alignment.Center)
+                    ) {
+                        SharedMaterialContainer(
+                            key = recipe.image,
+                            screenKey = "DetailsScreen",
+                            color = Color.Transparent,
+                            transitionSpec = FadeOutTransitionSpec
+                        ) {
+                            Box {
+                                Box(
+                                    modifier = Modifier
+                                        .offset {
+                                            IntOffset(
+                                                x = (roll * 2).dp.roundToPx(),
+                                                y = -(pitch * 2).dp.roundToPx()
                                             )
                                         }
+                                ) {
 
-                                        Image(
-                                            bitmap = imageBitmap,
-                                            contentDescription = null,
-                                            modifier = Modifier.aspectRatio(1f)
-                                                .align(Alignment.Center)
-                                                .padding(16.dp)
-                                                .rotate(imageRotation.value.toFloat())
-                                                .background(
-                                                    Color.Transparent,
-                                                    CircleShape,
-                                                )
+                                    Image(
+                                        painter = painterResource(recipe.image),
+                                        contentDescription = null,
+                                        modifier = Modifier.aspectRatio(1f)
+                                            .align(Alignment.Center)
+                                            .padding(16.dp)
+                                            .shadow(
+                                                elevation = 16.dp,
+                                                shape = CircleShape,
+                                                clip = false,
+                                                ambientColor = Color.Red,
+                                                spotColor = Color.Red,
+                                            ),
+                                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                            orangeDark.copy(alpha = 0.0f)
                                         )
-                                    }
+                                    )
                                 }
+
+                                Image(
+                                    painter = painterResource(recipe.image),
+                                    contentDescription = null,
+                                    modifier = Modifier.aspectRatio(1f)
+                                        .align(Alignment.Center)
+                                        .padding(16.dp)
+                                        .rotate(imageRotation.value.toFloat())
+                                        .background(
+                                            Color.Transparent,
+                                            CircleShape,
+                                        )
+                                )
                             }
                         }
                     }
                 }
             }
 
-            StepsAndDetails(recipe, chefImage)
+            StepsAndDetails(recipe)
         }
 
         Box(
