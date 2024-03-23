@@ -19,7 +19,6 @@ import sugar
 @Composable
 fun RecipesListScreen(
     items: List<Recipe>, width: Int,
-    updateIds: String,
     onClick: (recipe: Recipe) -> Unit,
     isLarge: Boolean,
 ) {
@@ -37,7 +36,6 @@ fun RecipesListScreen(
                         recipe = items[item],
                         width = width,
                         onClick = onClick,
-                        updateIds = updateIds
                     )
                 },
             )

@@ -32,7 +32,6 @@ import sharedelementtransaction.SharedMaterialContainer
 @Composable
 fun RecipeListItem(
     recipe: Recipe,
-    updateIds: String,
     width: Int,
     onClick: (recipe: Recipe) -> Unit,
 ) {
@@ -55,7 +54,7 @@ fun RecipeListItem(
                 }
         ) {
             SharedMaterialContainer(
-                key = "$recipe $updateIds",
+                key = "${recipe.id}",
                 screenKey = ListScreen,
                 shape = RoundedCornerShape(35.dp),
                 color = recipe.bgColor,
@@ -69,7 +68,7 @@ fun RecipeListItem(
                     ) {
                         Column(modifier = Modifier.align(Alignment.Bottom)) {
                             SharedElement(
-                                key = "${recipe.title}${updateIds}",
+                                key = "${recipe.title}",
                                 screenKey = "ListScreen",
                                 transitionSpec = CrossFadeTransitionSpec
                             ) {
@@ -79,7 +78,7 @@ fun RecipeListItem(
                                 )
                             }
                             SharedElement(
-                                key = "${recipe.description}${updateIds}",
+                                key = "${recipe.description}",
                                 screenKey = "ListScreen",
                                 transitionSpec = CrossFadeTransitionSpec
                             ) {
@@ -102,7 +101,7 @@ fun RecipeListItem(
             .fillMaxWidth(0.45f).aspectRatio(1f),
             child = {
                 SharedMaterialContainer(
-                    key = "${recipe.image}${updateIds}",
+                    key = "${recipe.image}",
                     screenKey = "ListScreen",
                     shape = CircleShape,
                     color = Color.Transparent,

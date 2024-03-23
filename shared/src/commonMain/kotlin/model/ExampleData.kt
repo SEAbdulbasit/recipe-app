@@ -8,6 +8,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import pinkLight
 import primary
 import recipeappkmp.shared.generated.resources.Res
+import recipeappkmp.shared.generated.resources.*
 import red
 import sugar
 import yellow
