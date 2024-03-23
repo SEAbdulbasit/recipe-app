@@ -85,8 +85,8 @@ fun App(
             width = it.size.width
         })
 
-        SharedElementsRoot {
-            val sharedTransaction = this
+//        SharedElementsRoot {
+//            val sharedTransaction = this
             NavHost(
                 navController = navController,
                 startDestination = RecipeAppScreen.List.name,
@@ -96,25 +96,25 @@ fun App(
                     RecipesListScreen(isLarge = isLarge, items = items, width = width, onClick = { recipe ->
                         navController.navigate(RecipeAppScreen.Details.name)
                         screenDetails = recipe
-                        prepareTransition(
-                            recipe.id, recipe.description, recipe.title, recipe.image
-                        )
+//                        prepareTransition(
+//                            recipe.id, recipe.description, recipe.title, recipe.image
+//                        )
                     })
                 }
                 composable(route = RecipeAppScreen.Details.name) {
                     RecipeDetails(isLarge = isLarge, sensorManager = sensorManager, recipe = screenDetails!!, goBack = {
                         navController.popBackStack(RecipeAppScreen.Details.name, true)
-                        sharedTransaction.prepareTransition()
-                        prepareTransition(
-                            screenDetails!!.id,
-                            screenDetails!!.description,
-                            screenDetails!!.title,
-                            screenDetails!!.image
-                        )
+//                        sharedTransaction.prepareTransition()
+//                        prepareTransition(
+//                            screenDetails!!.id,
+//                            screenDetails!!.description,
+//                            screenDetails!!.title,
+//                            screenDetails!!.image
+//                        )
                     })
                 }
             }
-        }
+//        }
     }
 }
 

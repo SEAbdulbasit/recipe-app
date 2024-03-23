@@ -137,75 +137,75 @@ fun RecipeDetailsLarge(
                         }
                     }
             ) {
-                SharedMaterialContainer(
-                    key = "$recipe ",
-                    screenKey = DetailsScreen,
-                    color = recipe.bgColor,
-                    shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
-                    onFractionChanged = setFraction,
-                    transitionSpec = MaterialFadeInTransitionSpec
-                ) {
-                    // background image + its shadow
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        if (recipe.bgImageLarge != null) {
-                            val painter = painterResource(recipe.bgImageLarge)
-                            Image(
-                                painter = painter,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .offset {
-                                        backgroundShadowOffset.value
-                                    }.graphicsLayer {
-                                        scaleX = 1.050f
-                                        scaleY = 1.050f
-                                    }.blur(radius = 8.dp),
-                                colorFilter = ColorFilter.tint(
-                                    orangeDark.copy(alpha = 0.3f)
+//                SharedMaterialContainer(
+//                    key = "$recipe ",
+//                    screenKey = DetailsScreen,
+//                    color = recipe.bgColor,
+//                    shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
+//                    onFractionChanged = setFraction,
+//                    transitionSpec = MaterialFadeInTransitionSpec
+//                ) {
+                // background image + its shadow
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (recipe.bgImageLarge != null) {
+                        val painter = painterResource(recipe.bgImageLarge)
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .offset {
+                                    backgroundShadowOffset.value
+                                }.graphicsLayer {
+                                    scaleX = 1.050f
+                                    scaleY = 1.050f
+                                }.blur(radius = 8.dp),
+                            colorFilter = ColorFilter.tint(
+                                orangeDark.copy(alpha = 0.3f)
+                            )
+                        )
+
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .background(
+                                    Color.Transparent,
+                                    RoundedCornerShape(
+                                        bottomEnd = 35.dp,
+                                        bottomStart = 35.dp
+                                    ),
                                 )
-                            )
+                                .offset {
+                                    backgroundImageOffset.value
+                                }.graphicsLayer {
+                                    shadowElevation = 8f
+                                    scaleX = 1.050f
+                                    scaleY = 1.050f
+                                },
+                        )
+                    }
 
-                            Image(
-                                painter = painter,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .background(
-                                        Color.Transparent,
-                                        RoundedCornerShape(
-                                            bottomEnd = 35.dp,
-                                            bottomStart = 35.dp
-                                        ),
-                                    )
-                                    .offset {
-                                        backgroundImageOffset.value
-                                    }.graphicsLayer {
-                                        shadowElevation = 8f
-                                        scaleX = 1.050f
-                                        scaleY = 1.050f
-                                    },
-                            )
-                        }
-
-                        // image shadows and image
-                        Box(
-                            modifier = Modifier.aspectRatio(1f).padding(32.dp)
-                                .align(Alignment.Center)
-                        ) {
-                            SharedMaterialContainer(
-                                key = recipe.image,
-                                screenKey = "DetailsScreen",
-                                color = Color.Transparent,
-                                transitionSpec = FadeOutTransitionSpec
-                            ) {
-                                Box(modifier = Modifier.padding(32.dp)) {
-                                    Image(
-                                        painter = painterResource(recipe.image),
-                                        contentDescription = null,
-                                        modifier = Modifier.aspectRatio(1f)
-                                            .align(Alignment.Center)
-                                            .padding(16.dp)
-                                            .rotate(imageRotation.value.toFloat())
+                    // image shadows and image
+                    Box(
+                        modifier = Modifier.aspectRatio(1f).padding(32.dp)
+                            .align(Alignment.Center)
+                    ) {
+//                        SharedMaterialContainer(
+//                            key = recipe.image,
+//                            screenKey = "DetailsScreen",
+//                            color = Color.Transparent,
+//                            transitionSpec = FadeOutTransitionSpec
+//                        ) {
+                            Box(modifier = Modifier.padding(32.dp)) {
+                                Image(
+                                    painter = painterResource(recipe.image),
+                                    contentDescription = null,
+                                    modifier = Modifier.aspectRatio(1f)
+                                        .align(Alignment.Center)
+                                        .padding(16.dp)
+                                        .rotate(imageRotation.value.toFloat())
 //                                                .shadow(
 //                                                    elevation = 16.dp,
 //                                                    shape = CircleShape,
@@ -213,12 +213,12 @@ fun RecipeDetailsLarge(
 //                                                    ambientColor = orangeDark.copy(alpha = 0.5f),
 //                                                    spotColor = Color.Red,
 //                                                )
-                                    )
-                                }
+                                )
                             }
-                        }
+//                        }
                     }
                 }
+//                }
 
                 BackButton(goBack, fraction)
             }

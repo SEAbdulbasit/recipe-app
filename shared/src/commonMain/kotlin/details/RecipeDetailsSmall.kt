@@ -142,14 +142,14 @@ fun RecipeDetailsSmall(
                             RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
                         ).height(candidateHeight.dp),
                 ) {
-                    SharedMaterialContainer(
-                        key = "$recipe ",
-                        screenKey = DetailsScreen,
-                        color = recipe.bgColor,
-                        shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                        onFractionChanged = setFraction,
-                        transitionSpec = MaterialFadeInTransitionSpec
-                    ) {
+//                    SharedMaterialContainer(
+//                        key = "$recipe ",
+//                        screenKey = DetailsScreen,
+//                        color = recipe.bgColor,
+//                        shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+//                        onFractionChanged = setFraction,
+//                        transitionSpec = MaterialFadeInTransitionSpec
+//                    ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             recipe.bgImage?.let { painterResource(it) }?.let {
                                 Image(
@@ -185,19 +185,19 @@ fun RecipeDetailsSmall(
                                 alpha = 1 - fraction
                             )
                         }
-                    }
+//                    }
 
                     // box and shadow
                     Box(
                         modifier = Modifier.aspectRatio(1f)
                             .align(Alignment.Center)
                     ) {
-                        SharedMaterialContainer(
-                            key = recipe.image,
-                            screenKey = "DetailsScreen",
-                            color = Color.Transparent,
-                            transitionSpec = FadeOutTransitionSpec
-                        ) {
+//                        SharedMaterialContainer(
+//                            key = recipe.image,
+//                            screenKey = "DetailsScreen",
+//                            color = Color.Transparent,
+//                            transitionSpec = FadeOutTransitionSpec
+//                        ) {
                             Box {
                                 Box(
                                     modifier = Modifier
@@ -241,7 +241,7 @@ fun RecipeDetailsSmall(
                                         )
                                 )
                             }
-                        }
+//                        }
                     }
                 }
             }
