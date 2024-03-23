@@ -15,8 +15,6 @@ import sensor.SensorManager
 @Composable
 fun RecipeDetails(
     recipe: Recipe,
-    imageBitmap: ImageBitmap,
-    chefImage: ImageBitmap?,
     goBack: () -> Unit,
     sensorManager: SensorManager,
     isLarge: Boolean
@@ -24,16 +22,12 @@ fun RecipeDetails(
     if (isLarge)
         RecipeDetailsLarge(
             recipe = recipe,
-            imageBitmap = imageBitmap,
-            chefImage = chefImage,
             goBack = goBack,
             sensorManager = sensorManager
         )
     else
         RecipeDetailsSmall(
             recipe = recipe,
-            imageBitmap = imageBitmap,
-            chefImage = chefImage,
             goBack = goBack,
             sensorManager = sensorManager
         )

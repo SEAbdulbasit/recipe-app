@@ -21,16 +21,17 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import recipeappkmp.shared.generated.resources.Res
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) {
+fun IngredientItem(recipe: Recipe, ingredient: String) {
     Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
         Box(
             modifier = Modifier
@@ -65,17 +66,14 @@ fun IngredientItem(recipe: Recipe, ingredient: String, chefImage: ImageBitmap?) 
                         CircleShape
                     ),
             ) {
-                chefImage?.let {
-                    Image(
-                        bitmap = it,
-                        contentDescription = null,
-                        modifier = Modifier.padding(12.dp).rotate(-30f),
-                        colorFilter = ColorFilter.tint(if (recipe.bgColor.luminance() > 0.3) Color.Companion.Black else Color.White)
-                    )
-                }
+                Image(
+                    painter = painterResource(Res.drawable.chef),
+                    contentDescription = null,
+                    modifier = Modifier.padding(12.dp).rotate(-30f),
+                    colorFilter = ColorFilter.tint(if (recipe.bgColor.luminance() > 0.3) Color.Companion.Black else Color.White)
+                )
+
             }
         }
     }
-
-
 }

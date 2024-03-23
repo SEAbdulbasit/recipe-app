@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import model.Recipe
@@ -20,8 +19,7 @@ import sharedelementtransaction.SharedElement
  */
 
 internal fun LazyListScope.StepsAndDetails(
-    recipe: Recipe,
-    chefImage: ImageBitmap?
+    recipe: Recipe
 ) {
     item {
         SharedElement(
@@ -68,7 +66,7 @@ internal fun LazyListScope.StepsAndDetails(
             intervalStart = (index + 1) / (recipe.instructions.size + recipe.ingredients.size + 1).toFloat(),
             recipe = recipe,
             content = {
-                IngredientItem(recipe, value, chefImage)
+                IngredientItem(recipe, value)
             }
         )
     }

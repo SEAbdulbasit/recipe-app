@@ -16,22 +16,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
 import sharedelementtransaction.SharedElement
 import sharedelementtransaction.SharedMaterialContainer
-import toImageBitmap
 
 
 @OptIn(ExperimentalResourceApi::class)
@@ -40,13 +34,8 @@ fun RecipeListItem(
     recipe: Recipe,
     updateIds: String,
     width: Int,
-    onClick: (recipe: Recipe, bitmap: ImageBitmap) -> Unit,
+    onClick: (recipe: Recipe) -> Unit,
 ) {
-    val image = remember { mutableStateOf<ImageBitmap?>(null) }
-
-    LaunchedEffect(Unit) {
-        image.value = resource(recipe.image).readBytes().toImageBitmap()
-    }
 
     Box(modifier = Modifier) {
         Box(
@@ -62,7 +51,7 @@ fun RecipeListItem(
                 .background(recipe.bgColor, RoundedCornerShape(35.dp))
                 .fillMaxHeight()
                 .clickable {
-                    onClick(recipe, image.value!!)
+                    onClick(recipe)
                 }
         ) {
             SharedMaterialContainer(
@@ -101,29 +90,28 @@ fun RecipeListItem(
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.padding(top = 8.dp)
                                 )
-                                        }
                             }
-                            Spacer(modifier = Modifier.weight(1f))
                         }
+                        Spacer(modifier = Modifier.weight(1f))
                     }
-            }
-                }
-                image.value?.let {
-                    RecipeListItemImageWrapper(modifier = Modifier.align(Alignment.BottomEnd)
-                        .fillMaxWidth(0.45f).aspectRatio(1f),
-                        child = {
-                    SharedMaterialContainer(
-                        key = "${recipe.image}${updateIds}",
-                        screenKey = "ListScreen",
-                        shape = CircleShape,
-                        color = Color.Transparent,
-                        transitionSpec = FadeOutTransitionSpec
-                    ) {
-                            RecipeImage(
-                                it, Modifier
-                            )
-                    }
-                        })
                 }
             }
         }
+
+        RecipeListItemImageWrapper(modifier = Modifier.align(Alignment.BottomEnd)
+            .fillMaxWidth(0.45f).aspectRatio(1f),
+            child = {
+                SharedMaterialContainer(
+                    key = "${recipe.image}${updateIds}",
+                    screenKey = "ListScreen",
+                    shape = CircleShape,
+                    color = Color.Transparent,
+                    transitionSpec = FadeOutTransitionSpec
+                ) {
+                    RecipeImage(
+                        recipe.image, Modifier
+                    )
+                }
+            })
+    }
+}

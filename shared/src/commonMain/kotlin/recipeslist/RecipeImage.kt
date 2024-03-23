@@ -10,14 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
 /**
  * Created by abdulbasit on 20/06/2023.
  */
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun RecipeImage(imageBitmap: ImageBitmap, modifier: Modifier) {
+fun RecipeImage(imageBitmap: DrawableResource, modifier: Modifier) {
     Box(modifier = modifier) {
         Box(
             modifier = modifier
@@ -28,7 +31,7 @@ fun RecipeImage(imageBitmap: ImageBitmap, modifier: Modifier) {
                 )
         )
         Image(
-            bitmap = imageBitmap,
+            painter = painterResource(imageBitmap),
             contentDescription = null,
             modifier = Modifier.background(
                 color = Color(0xffCE5A01).copy(alpha = 0.2f),
