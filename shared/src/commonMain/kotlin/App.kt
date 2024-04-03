@@ -14,6 +14,7 @@ import model.recipesList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import recipeappkmp.shared.generated.resources.Res
+import recipeappkmp.shared.generated.resources.*
 import recipeslist.RecipesListScreen
 import sensor.SensorManager
 import sharedelementtransaction.*

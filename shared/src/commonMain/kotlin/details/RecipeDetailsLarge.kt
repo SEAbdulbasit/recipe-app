@@ -138,7 +138,7 @@ fun RecipeDetailsLarge(
                     }
             ) {
                 SharedMaterialContainer(
-                    key = "$recipe ",
+                    key = "${recipe.id}",
                     screenKey = DetailsScreen,
                     color = recipe.bgColor,
                     shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
@@ -193,7 +193,7 @@ fun RecipeDetailsLarge(
                                 .align(Alignment.Center)
                         ) {
                             SharedMaterialContainer(
-                                key = recipe.image,
+                                key = recipe.image.toString(),
                                 screenKey = "DetailsScreen",
                                 color = Color.Transparent,
                                 transitionSpec = FadeOutTransitionSpec
