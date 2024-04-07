@@ -34,4 +34,15 @@ android {
     kotlin {
         jvmToolchain(11)
     }
+
+    dependencies {
+        implementation("androidx.compose.ui:ui:1.7.0-SNAPSHOT")
+        implementation("androidx.compose.animation:animation-core:1.7.0-SNAPSHOT")
+        implementation("androidx.compose.animation:animation:1.7.0-SNAPSHOT")
+        implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    }
+}
+dependencies {
+    implementation("androidx.compose.foundation:foundation-android:1.6.5")
 }

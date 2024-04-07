@@ -38,12 +38,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-                implementation("org.jetbrains.compose.navigation-internal:navigation-compose:0.0.0-nav-dev1535")
+                api(compose.components.resources)
+                api("org.jetbrains.compose.navigation-internal:navigation-compose:0.0.0-nav-dev1535")
             }
         }
         val androidMain by getting {

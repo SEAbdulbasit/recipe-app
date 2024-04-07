@@ -17,6 +17,7 @@ allprojects {
         mavenLocal()
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+        maven { url = uri("https://androidx.dev/snapshots/builds/11679629/artifacts/repository/") }
     }
 
     afterEvaluate {
