@@ -3,7 +3,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -138,7 +147,7 @@ fun RecipeDetailsLarge(
                     }
             ) {
                 SharedMaterialContainer(
-                    key = "${recipe.id}",
+                    key = "recipe-container-${recipe.id}",
                     screenKey = DetailsScreen,
                     color = recipe.bgColor,
                     shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
@@ -193,7 +202,7 @@ fun RecipeDetailsLarge(
                                 .align(Alignment.Center)
                         ) {
                             SharedMaterialContainer(
-                                key = recipe.image.toString(),
+                                key = "recipe-image-${recipe.id}",
                                 screenKey = "DetailsScreen",
                                 color = Color.Transparent,
                                 transitionSpec = FadeOutTransitionSpec
@@ -285,7 +294,11 @@ fun BackButton(goBack: () -> Unit, fraction: Float) {
                 modifier = Modifier.size(20.dp)
             )
             Spacer(Modifier.padding(start = 8.dp))
-            Text(text = "Back to Recipes", style = MaterialTheme.typography.subtitle2, color = Color.White)
+            Text(
+                text = "Back to Recipes",
+                style = MaterialTheme.typography.subtitle2,
+                color = Color.White
+            )
         }
     }
 }

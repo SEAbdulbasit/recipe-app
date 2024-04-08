@@ -10,7 +10,15 @@ import ListScreen
 import MaterialFadeOutTransitionSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -55,7 +63,7 @@ fun RecipeListItem(
                 }
         ) {
             SharedMaterialContainer(
-                key = "$recipe $updateIds",
+                key = "recipe-container-${recipe.id}$updateIds",
                 screenKey = ListScreen,
                 shape = RoundedCornerShape(35.dp),
                 color = recipe.bgColor,
@@ -69,7 +77,7 @@ fun RecipeListItem(
                     ) {
                         Column(modifier = Modifier.align(Alignment.Bottom)) {
                             SharedElement(
-                                key = "${recipe.title}${updateIds}",
+                                key = "recipe-title-${recipe.id}$updateIds",
                                 screenKey = "ListScreen",
                                 transitionSpec = CrossFadeTransitionSpec
                             ) {
@@ -79,7 +87,7 @@ fun RecipeListItem(
                                 )
                             }
                             SharedElement(
-                                key = "${recipe.description}${updateIds}",
+                                key = "recipe-description-${recipe.id}$updateIds",
                                 screenKey = "ListScreen",
                                 transitionSpec = CrossFadeTransitionSpec
                             ) {
@@ -102,7 +110,7 @@ fun RecipeListItem(
             .fillMaxWidth(0.45f).aspectRatio(1f),
             child = {
                 SharedMaterialContainer(
-                    key = "${recipe.image}${updateIds}",
+                    key = "recipe-image-${recipe.id}$updateIds",
                     screenKey = "ListScreen",
                     shape = CircleShape,
                     color = Color.Transparent,

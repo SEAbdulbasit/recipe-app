@@ -23,7 +23,7 @@ internal fun LazyListScope.StepsAndDetails(
 ) {
     item {
         SharedElement(
-            key = recipe.title,
+            key = "recipe-title-${recipe.id}",
             screenKey = "DetailsScreen",
             transitionSpec = CrossFadeTransitionSpec,
         ) {
@@ -36,7 +36,7 @@ internal fun LazyListScope.StepsAndDetails(
         }
 
         SharedElement(
-            key = recipe.description,
+            key = "recipe-description-${recipe.id}",
             screenKey = "DetailsScreen",
             transitionSpec = CrossFadeTransitionSpec
         ) {

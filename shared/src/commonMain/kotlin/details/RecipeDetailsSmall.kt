@@ -4,7 +4,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -19,7 +26,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.*
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -72,8 +83,6 @@ fun RecipeDetailsSmall(
         targetValue = IntOffset(-roll.toInt(), pitch.toInt()),
         animationSpec = tween(tweenDuration)
     )
-
-    val context = getPlatformContext()
 
     val toolbarOffsetHeightPx = remember { mutableStateOf(340f) }
     val nestedScrollConnection = remember {
@@ -142,8 +151,9 @@ fun RecipeDetailsSmall(
                             RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
                         ).height(candidateHeight.dp),
                 ) {
+
                     SharedMaterialContainer(
-                        key = "$recipe ",
+                        key = "recipe-container-${recipe.id}",
                         screenKey = DetailsScreen,
                         color = recipe.bgColor,
                         shape = RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
@@ -151,9 +161,9 @@ fun RecipeDetailsSmall(
                         transitionSpec = MaterialFadeInTransitionSpec
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            recipe.bgImage?.let { painterResource(it) }?.let {
+                            recipe.bgImage?.let {
                                 Image(
-                                    painter = it,
+                                    painter = painterResource(it),
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
@@ -167,79 +177,80 @@ fun RecipeDetailsSmall(
                                         orangeDark.copy(alpha = 0.3f)
                                     )
                                 )
+                                Image(
+                                    painter = painterResource(it),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier.background(
+                                        Color.Transparent,
+                                        RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
+                                    ).offset {
+                                        backgroundImageOffset.value
+                                    }.graphicsLayer {
+                                        shadowElevation = 8f
+                                        scaleX = 1.050f
+                                        scaleY = 1.050f
+                                    },
+                                    alpha = 1 - fraction
+                                )
                             }
-                            Image(
-                                painter = painterResource(recipe.image),
-                                contentDescription = null,
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.background(
-                                    Color.Transparent,
-                                    RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                                ).offset {
-                                    backgroundImageOffset.value
-                                }.graphicsLayer {
-                                    shadowElevation = 8f
-                                    scaleX = 1.050f
-                                    scaleY = 1.050f
-                                },
-                                alpha = 1 - fraction
-                            )
-                        }
-                    }
 
-                    // box and shadow
-                    Box(
-                        modifier = Modifier.aspectRatio(1f)
-                            .align(Alignment.Center)
-                    ) {
-                        SharedMaterialContainer(
-                            key = recipe.image,
-                            screenKey = "DetailsScreen",
-                            color = Color.Transparent,
-                            transitionSpec = FadeOutTransitionSpec
-                        ) {
-                            Box {
-                                Box(
-                                    modifier = Modifier
-                                        .offset {
-                                            IntOffset(
-                                                x = (roll * 2).dp.roundToPx(),
-                                                y = -(pitch * 2).dp.roundToPx()
+
+                            // recipe image and shadow
+                            Box(
+                                modifier = Modifier.aspectRatio(1f)
+                                    .align(Alignment.Center)
+                            ) {
+                                SharedMaterialContainer(
+                                    key = "recipe-image-${recipe.id}",
+                                    screenKey = "DetailsScreen",
+                                    color = Color.Transparent,
+                                    transitionSpec = FadeOutTransitionSpec
+                                ) {
+                                    Box {
+                                        Box(
+                                            modifier = Modifier
+                                                .offset {
+                                                    IntOffset(
+                                                        x = (roll * 2).dp.roundToPx(),
+                                                        y = -(pitch * 2).dp.roundToPx()
+                                                    )
+                                                }
+                                        ) {
+
+                                            Image(
+                                                painter = painterResource(recipe.image),
+                                                contentDescription = null,
+                                                modifier = Modifier.aspectRatio(1f)
+                                                    .align(Alignment.Center)
+                                                    .padding(16.dp)
+                                                    .shadow(
+                                                        elevation = 16.dp,
+                                                        shape = CircleShape,
+                                                        clip = false,
+                                                        ambientColor = Color.Red,
+                                                        spotColor = Color.Red,
+                                                    ),
+                                                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                                    orangeDark.copy(alpha = 0.0f)
+                                                )
                                             )
                                         }
-                                ) {
 
-                                    Image(
-                                        painter = painterResource(recipe.image),
-                                        contentDescription = null,
-                                        modifier = Modifier.aspectRatio(1f)
-                                            .align(Alignment.Center)
-                                            .padding(16.dp)
-                                            .shadow(
-                                                elevation = 16.dp,
-                                                shape = CircleShape,
-                                                clip = false,
-                                                ambientColor = Color.Red,
-                                                spotColor = Color.Red,
-                                            ),
-                                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                                            orangeDark.copy(alpha = 0.0f)
+                                        Image(
+                                            painter = painterResource(recipe.image),
+                                            contentDescription = null,
+                                            modifier = Modifier.aspectRatio(1f)
+                                                .align(Alignment.Center)
+                                                .padding(16.dp)
+                                                .rotate(imageRotation.value.toFloat())
+                                                .background(
+                                                    Color.Transparent,
+                                                    CircleShape,
+                                                )
                                         )
-                                    )
+                                    }
                                 }
-
-                                Image(
-                                    painter = painterResource(recipe.image),
-                                    contentDescription = null,
-                                    modifier = Modifier.aspectRatio(1f)
-                                        .align(Alignment.Center)
-                                        .padding(16.dp)
-                                        .rotate(imageRotation.value.toFloat())
-                                        .background(
-                                            Color.Transparent,
-                                            CircleShape,
-                                        )
-                                )
                             }
                         }
                     }
