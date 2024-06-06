@@ -1,12 +1,7 @@
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
-
 /**
  * Created by abdulbasit on 08/10/2023.
  */
+/*
 @OptIn(ExperimentalResourceApi::class)
 actual suspend fun font(
     name: String,
@@ -21,4 +16,4 @@ actual suspend fun font(
         weight = weight,
         style = style
     )
-}
+}*/
