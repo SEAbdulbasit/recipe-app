@@ -2,7 +2,7 @@
   "name": "Recipe App",
   "icons": [
     {
-      "src": "recipe-app/images/logo.png",
+      "src": "images/logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
