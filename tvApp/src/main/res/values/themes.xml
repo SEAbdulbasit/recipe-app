@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.RecipeAppKMP" parent="Theme.AppCompat.DayNight.NoActionBar" />
+</resources>
