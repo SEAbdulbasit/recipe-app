@@ -15,9 +15,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RecipeAppKMP">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".MainActivityTV"
+            android:name="com.recipeapp.tv.MainActivityTV"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
