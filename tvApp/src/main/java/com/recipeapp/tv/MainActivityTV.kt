@@ -24,7 +24,7 @@ class MainActivityTV : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     shape = RectangleShape
                 ) {
-                    MainView()
+                    MainView(isLargeScreen = true)
                 }
             }
         }
