@@ -55,7 +55,7 @@ fun RecipeListItem(
                 }
         ) {
             SharedMaterialContainer(
-                key = "$recipe $updateIds",
+                key = "recipe-container-${recipe.id}$updateIds",
                 screenKey = ListScreen,
                 shape = RoundedCornerShape(35.dp),
                 color = recipe.bgColor,
@@ -69,7 +69,7 @@ fun RecipeListItem(
                     ) {
                         Column(modifier = Modifier.align(Alignment.Bottom)) {
                             SharedElement(
-                                key = "${recipe.title}${updateIds}",
+                                key = "recipe-title-${recipe.id}$updateIds",
                                 screenKey = "ListScreen",
                                 transitionSpec = CrossFadeTransitionSpec
                             ) {
@@ -79,7 +79,7 @@ fun RecipeListItem(
                                 )
                             }
                             SharedElement(
-                                key = "${recipe.description}${updateIds}",
+                                key = "recipe-description-${recipe.id}$updateIds",
                                 screenKey = "ListScreen",
                                 transitionSpec = CrossFadeTransitionSpec
                             ) {
@@ -102,7 +102,7 @@ fun RecipeListItem(
             .fillMaxWidth(0.45f).aspectRatio(1f),
             child = {
                 SharedMaterialContainer(
-                    key = "${recipe.image}${updateIds}",
+                    key = "recipe-image-${recipe.id}$updateIds",
                     screenKey = "ListScreen",
                     shape = CircleShape,
                     color = Color.Transparent,

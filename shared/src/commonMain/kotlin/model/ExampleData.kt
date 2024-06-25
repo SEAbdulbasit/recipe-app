@@ -7,7 +7,7 @@ import orangeDark
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import pinkLight
 import primary
-import recipeappkmp.shared.generated.resources.Res
+import recipeappkmp.shared.generated.resources.*
 import red
 import sugar
 import yellow
@@ -283,62 +283,60 @@ val recipesList = listOf(
         bgImage = null,
         bgColor = honey,
     ),
-//    Recipe(
-//        id = 12,
-//        title = "Powdered Cake",
-//        description =
-//        "Heavy on the butter and nutmeg, this cake has all the flavors of your favorite cake donut in a convenient square shape.",
-//        ingredients = listOf(
-//            "",
-//        ),
-//        instructions = listOf(
-//            "",
-//        ),
-//        image = "11-powdered-cake.png",
-//        bgImageName = null,
-//        bgColor = sugar,
-//    ),
-//    Recipe(
-//        id = 13,
-//        title = "Strawberries",
-//        description =
-//        "We' ll admit it = we go a little crazy during strawberry season.Though easy to grow, these sweet berries just taste better when you get them in season, as opposed to buying them at other times of the year.",
-//        ingredients = listOf(
-//            "",
-//        ),
-//        instructions = listOf(
-//            "",
-//        ),
-//        image = "10-strawberries.png",
-//        bgImageName = null,
-//        bgColor = red,
-//    ),
-//    Recipe(
-//        id = 14,
-//        title = "Chocolate Cake",
-//        description =
-//        "The Best Chocolate Cake Recipe – A one bowl chocolate cake recipe that is quick, easy, and delicious! Updated with gluten-free, dairy-free, and egg-free options!",
-//        ingredients = listOf(
-//            "",
-//        ),
-//        instructions = listOf(
-//            "",
-//        ),
-//        image = "12-chocolate-cake-2.png",
-//        bgColor = orangeDark,
-//    ),
-//    Recipe(
-//        id = 15,
-//        title = "Apple Pie",
-//        description =
-//        "This was my grandmother' s apple pie recipe.I have never seen another one quite like it.It will always be my favorite and has won me several first place prizes in local competitions.",
-//        ingredients = listOf(
-//            "",
-//        ),
-//        instructions = listOf(
-//            "",
-//        ),
-//        image = "15-apple-pie.png",
-//        bgColor = sugar,
-//    )
+    Recipe(
+        id = 12,
+        title = "Powdered Cake",
+        description =
+        "Heavy on the butter and nutmeg, this cake has all the flavors of your favorite cake donut in a convenient square shape.",
+        ingredients = listOf(
+            "",
+        ),
+        instructions = listOf(
+            "",
+        ),
+        image = Res.drawable._11_powdered_cake,
+        bgColor = sugar,
+    ),
+    Recipe(
+        id = 13,
+        title = "Strawberries",
+        description =
+        "We' ll admit it = we go a little crazy during strawberry season.Though easy to grow, these sweet berries just taste better when you get them in season, as opposed to buying them at other times of the year.",
+        ingredients = listOf(
+            "",
+        ),
+        instructions = listOf(
+            "",
+        ),
+        image = Res.drawable._10_strawberries,
+        bgColor = red,
+    ),
+    Recipe(
+        id = 14,
+        title = "Chocolate Cake",
+        description =
+        "The Best Chocolate Cake Recipe – A one bowl chocolate cake recipe that is quick, easy, and delicious! Updated with gluten-free, dairy-free, and egg-free options!",
+        ingredients = listOf(
+            "",
+        ),
+        instructions = listOf(
+            "",
+        ),
+        image = Res.drawable._12_chocolate_cake_2,
+        bgColor = orangeDark,
+    ),
+    Recipe(
+        id = 15,
+        title = "Apple Pie",
+        description =
+        "This was my grandmother' s apple pie recipe.I have never seen another one quite like it.It will always be my favorite and has won me several first place prizes in local competitions.",
+        ingredients = listOf(
+            "",
+        ),
+        instructions = listOf(
+            "",
+        ),
+        image = Res.drawable._15_apple_pie,
+        bgColor = sugar,
+    )
 )

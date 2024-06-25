@@ -28,6 +28,7 @@ import model.Recipe
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import recipeappkmp.shared.generated.resources.Res
+import recipeappkmp.shared.generated.resources.chef
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
