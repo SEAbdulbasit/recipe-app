@@ -10,12 +10,15 @@ Inspired by [Roaa Kadam](https://github.com/Roaa94) flutter [app](https://github
 - iOS
 - Desktop
 - Web
+- Android TV
 
 
 ![Screenshot 2023-10-08 at 1 23 46 PM](https://github.com/SEAbdulbasit/recipe-app/assets/33172684/bf0c9376-fb57-4498-80f6-4a72300cb8e9)
 
-## Plans
-- Look into Android TV
+![Screenshot 2024-06-25 at 11 53 05 AM](https://github.com/Atif-09/recipe-app/assets/55842938/16e66d0b-48de-4403-bb74-e2788c756cc3)
+
+
+
 
 ## Demo
 

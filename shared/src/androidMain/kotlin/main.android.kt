@@ -10,7 +10,7 @@ import sensor.SensorDataManager
 import sensor.SensorManager
 
 @Composable
-fun MainView() {
+fun MainView(isLargeScreen: Boolean = false) {
 
     val sensorManager = SensorManager()
 
@@ -34,5 +34,5 @@ fun MainView() {
         }
     }
 
-    App(sensorManager)
+    App(sensorManager, isLargeScreen)
 }
