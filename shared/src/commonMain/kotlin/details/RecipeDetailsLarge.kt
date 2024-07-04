@@ -91,8 +91,6 @@ fun RecipeDetailsLarge(
         targetValue = IntOffset(-roll.toInt(), pitch.toInt()), animationSpec = tween(tweenDuration)
     )
 
-    val context = getPlatformContext()
-
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(
@@ -118,6 +116,7 @@ fun RecipeDetailsLarge(
     }
 
     with(sharedTransactionScope) {
+        sharedTransactionScope.isTransitionActive
         Box(
             modifier = Modifier.fillMaxSize()
                 .background(if (recipe.bgColor == sugar) yellow else sugar)
@@ -133,7 +132,6 @@ fun RecipeDetailsLarge(
                             // on every relayout Compose will send synthetic Move event,
                             // so we skip it to avoid event spam
                             if (event.type == PointerEventType.Move) {
-                                val previousPosition = sensorDataLive.value
                                 val position = event.changes.first().position
                                 sensorDataLive.value = SensorData(
                                     roll = position.x - size.value.height / 2,
@@ -154,7 +152,12 @@ fun RecipeDetailsLarge(
                                     animatedVisibilityScope,
                                 )
                             ),
-                        shape = RoundedCornerShape(topEnd = 35.dp, bottomEnd = 35.dp),
+                        shape = RoundedCornerShape(
+                            topEnd = 35.dp,
+                            bottomEnd = 35.dp,
+//                            topStart = if (sharedTransactionScope.isTransitionActive) 35.dp else 0.dp,
+//                            bottomStart = if (sharedTransactionScope.isTransitionActive) 35.dp else 0.dp
+                        ),
                     ) {
                         // background image + its shadow
                         Box(modifier = Modifier.fillMaxSize().background(recipe.bgColor)) {

@@ -3,6 +3,8 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -117,6 +119,10 @@ fun RecipeDetailsSmall(
 
     with(sharedTransactionScope) {
 
+        if (sharedTransactionScope.isTransitionActive.not()) {
+            setFraction(0f)
+        }
+
         Box(
             modifier = Modifier.fillMaxSize()
                 .background(color = if (recipe.bgColor == sugar) yellow else sugar)
@@ -147,15 +153,17 @@ fun RecipeDetailsSmall(
                             ).height(candidateHeight.dp),
                     ) {
                         Box(
-                            modifier = Modifier.fillMaxSize().then(
+                            modifier = Modifier.fillMaxSize().background(recipe.bgColor).then(
                                 Modifier.sharedElement(
                                     rememberSharedContentState(
-                                        key = "recipe-container"
+                                        key = "item-container-${recipe.id}"
                                     ),
                                     animatedVisibilityScope,
                                 )
                             )
                         ) {
+
+                            //bg image and shadow
                             recipe.bgImage?.let {
                                 Image(painter = painterResource(it),
                                     contentDescription = null,
@@ -193,29 +201,30 @@ fun RecipeDetailsSmall(
                                 modifier = Modifier.aspectRatio(1f).align(Alignment.Center)
                             ) {
                                 Box {
-                                    Box(modifier = Modifier.offset {
-                                        IntOffset(
-                                            x = (roll * 2).dp.roundToPx(),
-                                            y = -(pitch * 2).dp.roundToPx()
-                                        )
-                                    }) {
-
-                                        Image(
-                                            painter = painterResource(recipe.image),
-                                            contentDescription = null,
-                                            modifier = Modifier.aspectRatio(1f)
-                                                .align(Alignment.Center).padding(16.dp).shadow(
-                                                    elevation = 16.dp,
-                                                    shape = CircleShape,
-                                                    clip = false,
-                                                    ambientColor = Color.Red,
-                                                    spotColor = Color.Red,
-                                                ),
-                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                                                orangeDark.copy(alpha = 0.0f)
-                                            )
-                                        )
-                                    }
+                                    //image rounded shadow
+//                                    Box(modifier = Modifier.offset {
+//                                        IntOffset(
+//                                            x = (roll * 2).dp.roundToPx(),
+//                                            y = -(pitch * 2).dp.roundToPx()
+//                                        )
+//                                    }) {
+//
+//                                        Image(
+//                                            painter = painterResource(recipe.image),
+//                                            contentDescription = null,
+//                                            modifier = Modifier.aspectRatio(1f)
+//                                                .align(Alignment.Center).padding(16.dp).shadow(
+//                                                    elevation = 16.dp,
+//                                                    shape = CircleShape,
+//                                                    clip = false,
+//                                                    ambientColor = Color.Red,
+//                                                    spotColor = Color.Red,
+//                                                ),
+//                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+//                                                orangeDark.copy(alpha = 0.0f)
+//                                            )
+//                                        )
+//                                    }
 
                                     Image(
                                         painter = painterResource(recipe.image),
@@ -225,13 +234,12 @@ fun RecipeDetailsSmall(
                                             .background(
                                                 Color.Transparent,
                                                 CircleShape,
-                                            ).then(
-                                                Modifier.sharedElement(
-                                                    rememberSharedContentState(
-                                                        key = "recipe-image-${recipe.id}"
-                                                    ),
-                                                    animatedVisibilityScope,
-                                                )
+                                            ).sharedBounds(
+                                                rememberSharedContentState(key = "item-image-${recipe.id}"),
+                                                animatedVisibilityScope = animatedVisibilityScope,
+                                                enter = fadeIn(),
+                                                exit = fadeOut(),
+                                                resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
                                             )
                                     )
                                 }
@@ -247,7 +255,7 @@ fun RecipeDetailsSmall(
                 )
             }
 
-            Box(modifier = Modifier.padding(10.dp).alpha(
+            Box(modifier = Modifier.size(50.dp).padding(10.dp).alpha(
                 alpha = if (fraction <= 0) 1f else 0f,
             ).background(
                 color = Color.Black, shape = RoundedCornerShape(50)
