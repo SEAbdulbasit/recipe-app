@@ -5,6 +5,7 @@ include(":shared")
 include(":desktopApp")
 include(":webApp")
 include(":tvApp")
+include(":automotiveApp")
 
 
 pluginManagement {
