@@ -138,29 +138,27 @@ fun RecipeDetailsSmall(
                             elevation = if (fraction < 0.05) {
                                 ((1 - fraction) * 16).dp
                             } else 0.dp,
-                            shape = RoundedCornerShape(35.dp),
                             clip = false,
                             ambientColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f),
                             spotColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f)
                         ).alpha(if (fraction < 0.2) 1f - fraction else 0f).fillMaxWidth()
                             .background(
-                                Color.Transparent,
+                                recipe.bgColor,
                                 RoundedCornerShape(
                                     bottomEnd = 35.dp, bottomStart = 35.dp
                                 ),
-                            ).clip(
-                                RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp),
-                            ).height(candidateHeight.dp),
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize().background(recipe.bgColor).then(
+                            ).clip(RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp))
+                            .height(candidateHeight.dp).then(
                                 Modifier.sharedElement(
                                     rememberSharedContentState(
                                         key = "item-container-${recipe.id}"
                                     ),
                                     animatedVisibilityScope,
                                 )
-                            )
+                            ),
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize()
                         ) {
 
                             //bg image and shadow
