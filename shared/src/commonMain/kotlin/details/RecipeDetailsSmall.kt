@@ -116,7 +116,7 @@ fun RecipeDetailsSmall(
         }
     }
 
-    val candidateHeight = maxOf(toolbarOffsetHeightPx.value, 200f)
+    val candidateHeight = maxOf(toolbarOffsetHeightPx.value, 300f)
     val listState = rememberLazyListState()
     val (fraction, setFraction) = remember { mutableStateOf(1f) }
 
@@ -231,6 +231,7 @@ fun RecipeDetailsSmall(
                                         painter = painterResource(recipe.image),
                                         contentDescription = null,
                                         modifier = Modifier.aspectRatio(1f).align(Alignment.Center)
+                                            .windowInsetsPadding(WindowInsets.systemBars)
                                             .padding(16.dp).rotate(imageRotation.value.toFloat())
                                             .background(
                                                 Color.Transparent,

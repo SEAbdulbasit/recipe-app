@@ -5,7 +5,11 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -41,6 +45,9 @@ fun RecipesListScreen(
         LazyVerticalGrid(
             state = listState, columns = GridCells.Fixed(if (isLarge) 3 else 1)
         ) {
+            item {
+                Spacer(modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars))
+            }
             items(items.size) { item ->
                 val recipe = items[item]
                 RecipeListItemWrapper(
