@@ -3,8 +3,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -210,9 +208,6 @@ fun RecipeDetailsLarge(
                                             .sharedBounds(
                                                 rememberSharedContentState(key = "item-image-${recipe.id}"),
                                                 animatedVisibilityScope = animatedVisibilityScope,
-                                                enter = fadeIn(),
-                                                exit = fadeOut(),
-                                                resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
                                             )
 //                                                .shadow(
 //                                                    elevation = 16.dp,

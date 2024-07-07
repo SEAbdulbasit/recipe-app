@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -27,31 +28,34 @@ import sugar
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun RecipesListScreen(
-    items: List<Recipe>, width: Int,
+    items: List<Recipe>,
     onClick: (recipe: Recipe) -> Unit,
     isLarge: Boolean,
     sharedTransactionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
-    val listState = rememberLazyGridState()
-    LazyVerticalGrid(
-        modifier = Modifier.fillMaxSize().background(sugar),
-        state = listState,
-        columns = GridCells.Fixed(if (isLarge) 3 else 1)
+    Box(
+        modifier = Modifier.fillMaxSize().background(sugar)
     ) {
-        items(items.size) { item ->
-            RecipeListItemWrapper(
-                scrollDirection = listState.isScrollingUp(),
-                child = {
-                    RecipeListItem(
-                        recipe = items[item],
-                        width = width,
-                        onClick = onClick,
-                        sharedTransitionScope = sharedTransactionScope,
-                        animatedVisibilityScope = animatedVisibilityScope,
-                    )
-                },
-            )
+        val listState = rememberLazyGridState()
+        LazyVerticalGrid(
+            state = listState, columns = GridCells.Fixed(if (isLarge) 3 else 1)
+        ) {
+            items(items.size) { item ->
+                val recipe = items[item]
+                RecipeListItemWrapper(
+                    id = recipe.id,
+                    scrollDirection = listState.isScrollingUp(),
+                    child = {
+                        RecipeListItem(
+                            recipe = recipe,
+                            onClick = onClick,
+                            sharedTransitionScope = sharedTransactionScope,
+                            animatedVisibilityScope = animatedVisibilityScope,
+                        )
+                    }
+                )
+            }
         }
     }
 }

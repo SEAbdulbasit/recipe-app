@@ -202,29 +202,29 @@ fun RecipeDetailsSmall(
                             ) {
                                 Box {
                                     //image rounded shadow
-//                                    Box(modifier = Modifier.offset {
-//                                        IntOffset(
-//                                            x = (roll * 2).dp.roundToPx(),
-//                                            y = -(pitch * 2).dp.roundToPx()
-//                                        )
-//                                    }) {
-//
-//                                        Image(
-//                                            painter = painterResource(recipe.image),
-//                                            contentDescription = null,
-//                                            modifier = Modifier.aspectRatio(1f)
-//                                                .align(Alignment.Center).padding(16.dp).shadow(
-//                                                    elevation = 16.dp,
-//                                                    shape = CircleShape,
-//                                                    clip = false,
-//                                                    ambientColor = Color.Red,
-//                                                    spotColor = Color.Red,
-//                                                ),
-//                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-//                                                orangeDark.copy(alpha = 0.0f)
-//                                            )
-//                                        )
-//                                    }
+                                    Box(modifier = Modifier.offset {
+                                        IntOffset(
+                                            x = (roll * 2).dp.roundToPx(),
+                                            y = -(pitch * 2).dp.roundToPx()
+                                        )
+                                    }) {
+
+                                        Image(
+                                            painter = painterResource(recipe.image),
+                                            contentDescription = null,
+                                            modifier = Modifier.aspectRatio(1f)
+                                                .align(Alignment.Center).padding(16.dp).shadow(
+                                                    elevation = 16.dp,
+                                                    shape = CircleShape,
+                                                    clip = false,
+                                                    ambientColor = Color.Red,
+                                                    spotColor = Color.Red,
+                                                ),
+                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                                orangeDark.copy(alpha = 0.0f)
+                                            )
+                                        )
+                                    }
 
                                     Image(
                                         painter = painterResource(recipe.image),
