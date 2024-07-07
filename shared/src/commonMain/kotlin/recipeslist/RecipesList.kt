@@ -45,9 +45,10 @@ fun RecipesListScreen(
         LazyVerticalGrid(
             state = listState, columns = GridCells.Fixed(if (isLarge) 3 else 1)
         ) {
-            item {
-                Spacer(modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars))
-            }
+            if (isLarge.not())
+                item {
+                    Spacer(modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars))
+                }
             items(items.size) { item ->
                 val recipe = items[item]
                 RecipeListItemWrapper(
