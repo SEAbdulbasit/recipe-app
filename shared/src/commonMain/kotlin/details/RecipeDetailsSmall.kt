@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -200,29 +203,29 @@ fun RecipeDetailsSmall(
                             ) {
                                 Box {
                                     //image rounded shadow
-                                    Box(modifier = Modifier.offset {
-                                        IntOffset(
-                                            x = (roll * 2).dp.roundToPx(),
-                                            y = -(pitch * 2).dp.roundToPx()
-                                        )
-                                    }) {
-
-                                        Image(
-                                            painter = painterResource(recipe.image),
-                                            contentDescription = null,
-                                            modifier = Modifier.aspectRatio(1f)
-                                                .align(Alignment.Center).padding(16.dp).shadow(
-                                                    elevation = 16.dp,
-                                                    shape = CircleShape,
-                                                    clip = false,
-                                                    ambientColor = Color.Red,
-                                                    spotColor = Color.Red,
-                                                ),
-                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                                                orangeDark.copy(alpha = 0.0f)
-                                            )
-                                        )
-                                    }
+//                                    Box(modifier = Modifier.offset {
+//                                        IntOffset(
+//                                            x = (roll * 2).dp.roundToPx(),
+//                                            y = -(pitch * 2).dp.roundToPx()
+//                                        )
+//                                    }) {
+//
+//                                        Image(
+//                                            painter = painterResource(recipe.image),
+//                                            contentDescription = null,
+//                                            modifier = Modifier.aspectRatio(1f)
+//                                                .align(Alignment.Center).padding(16.dp).shadow(
+//                                                    elevation = 16.dp,
+//                                                    shape = CircleShape,
+//                                                    clip = false,
+//                                                    ambientColor = Color.Red,
+//                                                    spotColor = Color.Red,
+//                                                ),
+//                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+//                                                orangeDark.copy(alpha = 0.0f)
+//                                            )
+//                                        )
+//                                    }
 
                                     Image(
                                         painter = painterResource(recipe.image),
@@ -253,13 +256,14 @@ fun RecipeDetailsSmall(
                 )
             }
 
-            Box(modifier = Modifier.size(50.dp).padding(10.dp).alpha(
-                alpha = if (fraction <= 0) 1f else 0f,
-            ).background(
-                color = Color.Black, shape = RoundedCornerShape(50)
-            ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                goBack()
-            }) {
+            Box(modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars).size(50.dp)
+                .padding(10.dp).alpha(
+                    alpha = if (fraction <= 0) 1f else 0f,
+                ).background(
+                    color = Color.Black, shape = RoundedCornerShape(50)
+                ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                    goBack()
+                }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
