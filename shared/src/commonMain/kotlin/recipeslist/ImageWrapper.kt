@@ -34,10 +34,8 @@ fun RecipeListItemImageWrapper(
 
     LaunchedEffect(Unit) {
         scale.animateTo(
-            targetValue = 1f,
-            animationSpec = spring(
-                dampingRatio = 0.6f,
-                stiffness = 200f
+            targetValue = 1f, animationSpec = spring(
+                dampingRatio = 0.6f, stiffness = 200f
             )
         )
     }
@@ -49,31 +47,21 @@ fun RecipeListItemImageWrapper(
     LaunchedEffect(Unit) {
         offset.animateTo(
             60f, animationSpec = tween(
-                durationMillis = animationDuration / 2,
-                easing = FastOutSlowInEasing
+                durationMillis = animationDuration / 2, easing = FastOutSlowInEasing
             )
         )
         offset.animateTo(
-            targetValue = 0f,
-            animationSpec = spring(
-                dampingRatio = DampingRatioLowBouncy,
-                stiffness = 200f
+            targetValue = 0f, animationSpec = spring(
+                dampingRatio = DampingRatioLowBouncy, stiffness = 200f
             )
         )
     }
 
-    Box(
-        modifier = modifier
-            .offset(x = offset.value.dp)
-            .graphicsLayer {
-                this.rotationZ = rotation.value
-            }
-    ) {
+    Box(modifier = modifier.offset(x = offset.value.dp).graphicsLayer {
+            this.rotationZ = rotation.value
+        }) {
         Box(
-            modifier = Modifier
-                .wrapContentSize()
-                .scale(scale.value)
-                .rotate(rotation.value)
+            modifier = Modifier.wrapContentSize().scale(scale.value).rotate(rotation.value)
         ) {
             child()
         }

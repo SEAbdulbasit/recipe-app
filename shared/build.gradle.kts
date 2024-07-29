@@ -43,14 +43,15 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
             }
         }
 
         androidMain {
             dependencies {
-                api("androidx.activity:activity-compose:1.8.0")
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.12.0")
+                api("androidx.activity:activity-compose:1.9.0")
+                api("androidx.appcompat:appcompat:1.7.0")
+                api("androidx.core:core-ktx:1.13.1")
             }
         }
 
@@ -67,16 +68,13 @@ kotlin {
         }
 
         val jsWasmMain by creating {
-//            dependsOn(commonMain)
         }
 
         val jsMain by getting {
-//            dependsOn(jsWasmMain)
             dependencies {
             }
         }
         val wasmJsMain by getting {
-//            dependsOn(commonMain)
             dependencies {
             }
         }
