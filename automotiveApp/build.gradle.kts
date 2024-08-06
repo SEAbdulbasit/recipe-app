@@ -19,7 +19,7 @@ android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
     namespace = "com.myapplication"
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
 
     defaultConfig {
         minSdk = (findProperty("android.minSdk") as String).toInt()
@@ -35,6 +35,4 @@ android {
         jvmToolchain(11)
     }
 }
-dependencies {
-    implementation("androidx.window:window:1.3.0")
-}
+
