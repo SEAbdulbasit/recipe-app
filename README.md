@@ -5,13 +5,16 @@ Inspired by [Roaa Kadam](https://github.com/Roaa94) flutter [app](https://github
 > **Note**
 > It is still a work in progress
 
+
+### Live
+You can find it live [here](https://seabdulbasit.github.io/recipe-app/)
+
 ## Supported Platforms
 - Android
 - iOS
 - Desktop
 - Web
 - Android TV
-
 
 ![Screenshot 2023-10-08 at 1 23 46 PM](https://github.com/SEAbdulbasit/recipe-app/assets/33172684/bf0c9376-fb57-4498-80f6-4a72300cb8e9)
 
