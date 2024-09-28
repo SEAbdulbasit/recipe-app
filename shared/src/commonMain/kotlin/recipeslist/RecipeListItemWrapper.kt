@@ -21,7 +21,6 @@ const val rotateX = 9f
 
 @Composable
 fun RecipeListItemWrapper(
-    id: Int,
     child: @Composable () -> Unit,
     scrollDirection: Boolean
 ) {

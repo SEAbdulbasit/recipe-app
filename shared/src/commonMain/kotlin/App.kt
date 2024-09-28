@@ -17,7 +17,7 @@ import sensor.SensorManager
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
+fun App(sensorManager: SensorManager?, isLarge: Boolean = false) {
 
     val fontFamily = getFontFamily()
     val navController = rememberNavController()
@@ -56,6 +56,6 @@ fun App(sensorManager: SensorManager, isLarge: Boolean = false) {
     }
 }
 
-enum class RecipeAppScreen(title: String) {
-    List(title = "ListScreen"), Details(title = "DetailsScreen"),
+enum class RecipeAppScreen {
+    List, Details,
 }

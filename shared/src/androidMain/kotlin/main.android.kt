@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sensor.SensorDataManager
-import sensor.SensorManager
+import sensor.SensorManagerImpl
 
 @Composable
 fun MainView(isLargeScreen: Boolean = false) {
 
-    val sensorManager = SensorManager()
+    val sensorManager = SensorManagerImpl()
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()

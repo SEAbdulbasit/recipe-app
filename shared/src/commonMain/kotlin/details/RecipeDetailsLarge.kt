@@ -24,6 +24,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -64,7 +65,7 @@ import kotlin.math.PI
 fun RecipeDetailsLarge(
     recipe: Recipe,
     goBack: () -> Unit,
-    sensorManager: SensorManager,
+    sensorManager: SensorManager?,
     animatedVisibilityScope: AnimatedContentScope,
     sharedTransactionScope: SharedTransitionScope,
 ) {
@@ -75,7 +76,7 @@ fun RecipeDetailsLarge(
 
     val tweenDuration = 300
 
-    sensorManager.registerListener(object : Listener {
+    sensorManager?.registerListener(object : Listener {
         override fun onUpdate(sensorData: SensorData) {
             sensorDataLive.value = sensorData
         }
@@ -283,7 +284,7 @@ fun BackButton(goBack: () -> Unit) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Default.ArrowBack,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(20.dp)

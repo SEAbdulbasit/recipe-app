@@ -1,7 +1,8 @@
 plugins {
-    kotlin("multiplatform")
-    id("com.android.application")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.application)
+//    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose)
 }
 
 kotlin {
@@ -36,5 +37,5 @@ android {
     }
 }
 dependencies {
-    implementation("androidx.window:window:1.3.0")
+    implementation(libs.androidx.window)
 }
