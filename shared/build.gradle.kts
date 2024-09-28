@@ -1,6 +1,5 @@
 plugins {
     kotlin("native.cocoapods")
-
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
@@ -44,20 +43,16 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
+                implementation(libs.navigation.compose)
             }
         }
 
         androidMain {
             dependencies {
-                api("androidx.activity:activity-compose:1.9.0")
-                api("androidx.appcompat:appcompat:1.7.0")
-                api("androidx.core:core-ktx:1.13.1")
+                api(libs.androidx.activity.compose)
+                api(libs.androidx.appcompat)
+                api(libs.androidx.core.ktx)
             }
-        }
-
-        iosMain {
-
         }
 
         val desktopMain by getting {
