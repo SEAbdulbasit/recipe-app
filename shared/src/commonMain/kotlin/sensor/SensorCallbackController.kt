@@ -1,7 +1,6 @@
 package sensor
 
-expect class SensorManager {
-
+fun interface SensorManager {
     fun registerListener(listener: Listener)
 }
 

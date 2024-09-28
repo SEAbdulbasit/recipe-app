@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sensor.SensorDataManager
-import sensor.SensorManager
+import sensor.SensorManagerImpl
 
 
 fun MainViewController() =
     ComposeUIViewController {
-        val sensorManager = SensorManager()
+        val sensorManager = SensorManagerImpl()
         val scope = rememberCoroutineScope()
 
         DisposableEffect(Unit) {
