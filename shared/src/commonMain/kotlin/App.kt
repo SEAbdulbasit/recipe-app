@@ -56,6 +56,6 @@ fun App(sensorManager: SensorManager?, isLarge: Boolean = false) {
     }
 }
 
-enum class RecipeAppScreen(title: String) {
-    List(title = "ListScreen"), Details(title = "DetailsScreen"),
+enum class RecipeAppScreen {
+    List, Details,
 }
