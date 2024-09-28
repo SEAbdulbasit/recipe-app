@@ -18,7 +18,7 @@ import sensor.SensorManager
 fun RecipeDetails(
     recipe: Recipe,
     goBack: () -> Unit,
-    sensorManager: SensorManager,
+    sensorManager: SensorManager?,
     isLarge: Boolean,
     animatedVisibilityScope: AnimatedContentScope,
     sharedTransactionScope: SharedTransitionScope

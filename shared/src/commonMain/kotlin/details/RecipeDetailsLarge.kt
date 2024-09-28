@@ -64,7 +64,7 @@ import kotlin.math.PI
 fun RecipeDetailsLarge(
     recipe: Recipe,
     goBack: () -> Unit,
-    sensorManager: SensorManager,
+    sensorManager: SensorManager?,
     animatedVisibilityScope: AnimatedContentScope,
     sharedTransactionScope: SharedTransitionScope,
 ) {
@@ -75,7 +75,7 @@ fun RecipeDetailsLarge(
 
     val tweenDuration = 300
 
-    sensorManager.registerListener(object : Listener {
+    sensorManager?.registerListener(object : Listener {
         override fun onUpdate(sensorData: SensorData) {
             sensorDataLive.value = sensorData
         }
