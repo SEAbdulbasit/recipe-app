@@ -93,7 +93,7 @@ internal fun LazyListScope.StepsAndDetails(
             )
         }
 
-        itemsIndexed(recipe.instructions) { index, item ->
+        itemsIndexed(recipe.instructions) { index, _ ->
             AnimateInEffect(
                 recipe = recipe,
                 intervalStart = (recipe.ingredients.size + index + 1) / (recipe.instructions.size + recipe.ingredients.size + 1).toFloat(),
