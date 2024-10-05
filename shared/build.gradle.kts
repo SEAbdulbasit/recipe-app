@@ -63,18 +63,6 @@ kotlin {
                 }
             }
         }
-
-        val jsWasmMain by creating {
-        }
-
-        val jsMain by getting {
-            dependencies {
-            }
-        }
-        val wasmJsMain by getting {
-            dependencies {
-            }
-        }
     }
 }
 

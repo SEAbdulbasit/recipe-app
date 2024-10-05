@@ -133,8 +133,8 @@ fun RecipeDetailsLarge(
                             if (event.type == PointerEventType.Move) {
                                 val position = event.changes.first().position
                                 sensorDataLive.value = SensorData(
-                                    roll = position.x - size.value.height / 2,
-                                    pitch = (position.y - size.value.width / 2)
+                                    roll = position.x - size.value.height / 4,
+                                    pitch = (position.y - size.value.width / 4)
                                 )
                             }
                         }
