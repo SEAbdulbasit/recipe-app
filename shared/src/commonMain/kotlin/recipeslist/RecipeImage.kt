@@ -2,7 +2,6 @@ package recipeslist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,22 +20,15 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RecipeImage(imageBitmap: DrawableResource, modifier: Modifier) {
-    Box(modifier = modifier) {
-        Box(
-            modifier = modifier
-                .clip(RoundedCornerShape(50))
-                .background(
-                    color = Color.Transparent,
-                    shape = RoundedCornerShape(50)
-                )
-        )
-        Image(
-            painter = painterResource(imageBitmap),
-            contentDescription = null,
-            modifier = Modifier.background(
+    Image(
+        painter = painterResource(imageBitmap),
+        contentDescription = null,
+        modifier = modifier
+            .clip(RoundedCornerShape(50))
+            .background(
                 color = Color(0xffCE5A01).copy(alpha = 0.2f),
                 shape = CircleShape,
-            ).aspectRatio(1f)
-        )
-    }
+            )
+            .aspectRatio(1f)
+    )
 }
