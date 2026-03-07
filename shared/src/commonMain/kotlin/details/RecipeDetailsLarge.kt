@@ -32,7 +32,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -72,33 +74,38 @@ fun RecipeDetailsLarge(
     animatedVisibilityScope: AnimatedContentScope,
     sharedTransactionScope: SharedTransitionScope,
 ) {
-    val imageRotation = remember { mutableStateOf(0) }
+    val imageRotation = remember { androidx.compose.animation.core.Animatable(0f) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
     val roll by derivedStateOf { (sensorDataLive.value.roll * 20).coerceIn(-4f, 4f) }
     val pitch by derivedStateOf { (sensorDataLive.value.pitch * 20).coerceIn(-4f, 4f) }
 
     val tweenDuration = 300
 
-    sensorManager?.registerListener(object : Listener {
-        override fun onUpdate(sensorData: SensorData) {
-            sensorDataLive.value = sensorData
-        }
-    })
+    androidx.compose.runtime.LaunchedEffect(sensorManager) {
+        sensorManager?.registerListener(object : Listener {
+            override fun onUpdate(sensorData: SensorData) {
+                sensorDataLive.value = sensorData
+            }
+        })
+    }
 
     val backgroundShadowOffset = animateIntOffsetAsState(
-        targetValue = IntOffset((roll * 6f).toInt(), (pitch * 6f).toInt()),
+        targetValue = IntOffset((roll * 12f).toInt(), (pitch * 12f).toInt()),
         animationSpec = tween(tweenDuration)
     )
     val backgroundImageOffset = animateIntOffsetAsState(
-        targetValue = IntOffset(-roll.toInt(), pitch.toInt()), animationSpec = tween(tweenDuration)
+        targetValue = IntOffset((-roll * 8f).toInt(), (pitch * 8f).toInt()), animationSpec = tween(tweenDuration)
     )
 
+    val coroutineScope = rememberCoroutineScope()
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(
                 available: Offset, source: NestedScrollSource
             ): Offset {
-                imageRotation.value += (available.y * 0.5).toInt()
+                coroutineScope.launch {
+                    imageRotation.snapTo(imageRotation.value + (available.y * 0.5f))
+                }
                 return Offset.Zero
             }
 
@@ -106,12 +113,22 @@ fun RecipeDetailsLarge(
                 consumed: Offset, available: Offset, source: NestedScrollSource
             ): Offset {
                 val delta = available.y
-                imageRotation.value += ((delta * PI / 180) * 10).toInt()
+                coroutineScope.launch {
+                    imageRotation.snapTo(imageRotation.value + ((delta * PI / 180) * 10).toFloat())
+                }
                 return super.onPostScroll(consumed, available, source)
             }
 
             override suspend fun onPreFling(available: Velocity): Velocity {
-                imageRotation.value += available.y.toInt()
+                coroutineScope.launch {
+                    imageRotation.animateDecay(
+                        initialVelocity = available.y * 0.3f,
+                        animationSpec = androidx.compose.animation.core.exponentialDecay(
+                            frictionMultiplier = 3f,
+                            absVelocityThreshold = 0.5f
+                        )
+                    )
+                }
                 return super.onPreFling(available)
             }
         }
@@ -230,7 +247,7 @@ fun RecipeDetailsLarge(
                 Box(
                     modifier = Modifier.fillMaxSize()
                         .background(if (recipe.bgColor == sugar) yellow else sugar)
-                        .pointerInput(Unit) {
+                        .pointerInput(Unit, coroutineScope) {
                             awaitPointerEventScope {
                                 while (true) {
                                     val event = awaitPointerEvent()
@@ -238,9 +255,11 @@ fun RecipeDetailsLarge(
                                         val position = event.changes.first().position
                                         // on every relayout Compose will send synthetic Move event,
                                         // so we skip it to avoid event spam
-                                        imageRotation.value =
-                                            (imageRotation.value + position.getDistance()
-                                                .toInt() * 0.010).toInt()
+                                        coroutineScope.launch {
+                                            imageRotation.snapTo(
+                                                imageRotation.value + (position.getDistance() * 0.010f)
+                                            )
+                                        }
                                     }
                                 }
                             }

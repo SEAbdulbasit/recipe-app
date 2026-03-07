@@ -19,7 +19,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
@@ -50,28 +52,33 @@ fun RecipeDetailsSmall(
     animatedVisibilityScope: AnimatedContentScope,
     sharedTransactionScope: SharedTransitionScope
 ) {
-    val imageRotation = remember { mutableStateOf(0) }
+    val imageRotation = remember { androidx.compose.animation.core.Animatable(0f) }
     val sensorDataLive = remember { mutableStateOf(SensorData(0.0f, 0.0f)) }
     val roll by derivedStateOf { (sensorDataLive.value.roll).coerceIn(-3f, 3f) }
     val pitch by derivedStateOf { (sensorDataLive.value.pitch).coerceIn(-2f, 2f) }
 
     val tweenDuration = 300
 
-    sensorManager?.registerListener(object : Listener {
-        override fun onUpdate(sensorData: SensorData) {
-            sensorDataLive.value = sensorData
-        }
-    })
+    androidx.compose.runtime.LaunchedEffect(sensorManager) {
+        println("RecipeDetailsSmall: Registering sensor listener, sensorManager = $sensorManager")
+        sensorManager?.registerListener(object : Listener {
+            override fun onUpdate(sensorData: SensorData) {
+                println("RecipeDetailsSmall: Sensor data received - roll: ${sensorData.roll}, pitch: ${sensorData.pitch}")
+                sensorDataLive.value = sensorData
+            }
+        })
+    }
 
     val backgroundShadowOffset = animateIntOffsetAsState(
-        targetValue = IntOffset((roll * 6f).toInt(), (pitch * 6f).toInt()),
+        targetValue = IntOffset((roll * 12f).toInt(), (pitch * 12f).toInt()),
         animationSpec = tween(tweenDuration)
     )
     val backgroundImageOffset = animateIntOffsetAsState(
-        targetValue = IntOffset(-roll.toInt(), pitch.toInt()), animationSpec = tween(tweenDuration)
+        targetValue = IntOffset((-roll * 8f).toInt(), (pitch * 8f).toInt()), animationSpec = tween(tweenDuration)
     )
 
     val toolbarOffsetHeightPx = remember { mutableStateOf(340f) }
+    val coroutineScope = rememberCoroutineScope()
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(
@@ -80,7 +87,9 @@ fun RecipeDetailsSmall(
                 val delta = available.y
                 val newOffset = toolbarOffsetHeightPx.value + delta
                 toolbarOffsetHeightPx.value = newOffset.coerceIn(0f, 340f)
-                imageRotation.value += (available.y * 0.5).toInt()
+                coroutineScope.launch {
+                    imageRotation.snapTo(imageRotation.value + (available.y * 0.5f))
+                }
                 return Offset.Zero
             }
 
@@ -88,12 +97,22 @@ fun RecipeDetailsSmall(
                 consumed: Offset, available: Offset, source: NestedScrollSource
             ): Offset {
                 val delta = available.y
-                imageRotation.value += ((delta * PI / 180) * 10).toInt()
+                coroutineScope.launch {
+                    imageRotation.snapTo(imageRotation.value + ((delta * PI / 180) * 10).toFloat())
+                }
                 return super.onPostScroll(consumed, available, source)
             }
 
             override suspend fun onPreFling(available: Velocity): Velocity {
-                imageRotation.value += available.y.toInt()
+                coroutineScope.launch {
+                    imageRotation.animateDecay(
+                        initialVelocity = available.y * 0.3f,
+                        animationSpec = androidx.compose.animation.core.exponentialDecay(
+                            frictionMultiplier = 3f,
+                            absVelocityThreshold = 0.5f
+                        )
+                    )
+                }
                 return super.onPreFling(available)
             }
         }
