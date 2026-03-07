@@ -35,7 +35,7 @@ internal fun LazyListScope.StepsAndDetails(
                 modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp).then(
                     Modifier.sharedElement(
                         rememberSharedContentState(
-                            key = "recipe-title-${recipe.id}"
+                            key = "item-title-${recipe.id}"
                         ),
                         animatedVisibilityScope,
                     )

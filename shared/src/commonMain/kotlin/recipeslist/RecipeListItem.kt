@@ -57,10 +57,10 @@ fun RecipeListItem(
                     backgroundColor = recipe.bgColor,
                     shape = RoundedCornerShape(35.dp),
                     modifier = Modifier.clip(RoundedCornerShape(35.dp)).sharedElement(
-                        state = rememberSharedContentState(
+                        rememberSharedContentState(
                             key = "item-container-${recipe.id}"
                         ),
-                        animatedVisibilityScope = animatedVisibilityScope,
+                        animatedVisibilityScope,
                     )
                 ) {
                     Box(
@@ -75,10 +75,10 @@ fun RecipeListItem(
                                     text = recipe.title,
                                     style = MaterialTheme.typography.h4,
                                     modifier = Modifier.sharedElement(
-                                        state = rememberSharedContentState(
+                                        rememberSharedContentState(
                                             key = "item-title-${recipe.id}"
                                         ),
-                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        animatedVisibilityScope,
                                     )
                                 )
 
@@ -88,10 +88,10 @@ fun RecipeListItem(
                                     maxLines = 3,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.padding(top = 8.dp).sharedElement(
-                                        state = rememberSharedContentState(
+                                        rememberSharedContentState(
                                             key = "recipe-description-${recipe.id}"
                                         ),
-                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        animatedVisibilityScope,
                                     )
                                 )
                             }
@@ -102,8 +102,8 @@ fun RecipeListItem(
                         .fillMaxWidth(0.45f).aspectRatio(1f), child = {
                         RecipeImage(
                             imageBitmap = recipe.image, modifier = Modifier.sharedElement(
-                                state = rememberSharedContentState(key = "item-image-${recipe.id}"),
-                                animatedVisibilityScope = animatedVisibilityScope,
+                                rememberSharedContentState(key = "item-image-${recipe.id}"),
+                                animatedVisibilityScope,
                             )
                         )
                     })

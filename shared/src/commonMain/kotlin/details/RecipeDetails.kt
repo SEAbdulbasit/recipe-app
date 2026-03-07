@@ -1,6 +1,5 @@
 package details
 
-import RecipeDetailsLarge
 import RecipeDetailsSmall
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi

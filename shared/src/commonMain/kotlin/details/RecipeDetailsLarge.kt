@@ -1,3 +1,5 @@
+package details
+
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -25,7 +27,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -51,12 +52,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import details.StepsAndDetails
 import model.Recipe
+import orangeDark
 import org.jetbrains.compose.resources.painterResource
 import sensor.Listener
 import sensor.SensorData
 import sensor.SensorManager
+import sugar
+import yellow
 import kotlin.math.PI
 
 
@@ -284,7 +287,7 @@ fun BackButton(goBack: () -> Unit) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(20.dp)

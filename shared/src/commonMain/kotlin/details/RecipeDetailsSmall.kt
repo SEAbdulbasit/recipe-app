@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -119,27 +120,20 @@ fun RecipeDetailsSmall(
 
                 stickyHeader {
                     Box(
-                        modifier = Modifier.shadow(
-                            elevation = if (fraction < 0.05) {
-                                ((1 - fraction) * 16).dp
-                            } else 0.dp,
-                            clip = false,
-                            ambientColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f),
-                            spotColor = Color(0xffCE5A01).copy(if (fraction < 0.1) 1f - fraction else 0f)
-                        ).alpha(if (fraction < 0.2) 1f - fraction else 0f).fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
+                            .height(candidateHeight.dp)
+                            .sharedElement(
+                                rememberSharedContentState(
+                                    key = "item-container-${recipe.id}"
+                                ),
+                                animatedVisibilityScope,
+                            )
+                            .clip(RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp))
                             .background(
                                 recipe.bgColor,
                                 RoundedCornerShape(
                                     bottomEnd = 35.dp, bottomStart = 35.dp
                                 ),
-                            ).clip(RoundedCornerShape(bottomEnd = 35.dp, bottomStart = 35.dp))
-                            .height(candidateHeight.dp).then(
-                                Modifier.sharedElement(
-                                    rememberSharedContentState(
-                                        key = "item-container-${recipe.id}"
-                                    ),
-                                    animatedVisibilityScope,
-                                )
                             ),
                     ) {
                         Box(
@@ -183,50 +177,22 @@ fun RecipeDetailsSmall(
                             Box(
                                 modifier = Modifier.aspectRatio(1f).align(Alignment.Center)
                             ) {
-                                Box {
-                                    //image rounded shadow
-//                                    Box(modifier = Modifier.offset {
-//                                        IntOffset(
-//                                            x = (roll * 2).dp.roundToPx(),
-//                                            y = -(pitch * 2).dp.roundToPx()
-//                                        )
-//                                    }) {
-//
-//                                        Image(
-//                                            painter = painterResource(recipe.image),
-//                                            contentDescription = null,
-//                                            modifier = Modifier.aspectRatio(1f)
-//                                                .align(Alignment.Center).padding(16.dp).shadow(
-//                                                    elevation = 16.dp,
-//                                                    shape = CircleShape,
-//                                                    clip = false,
-//                                                    ambientColor = Color.Red,
-//                                                    spotColor = Color.Red,
-//                                                ),
-//                                            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-//                                                orangeDark.copy(alpha = 0.0f)
-//                                            )
-//                                        )
-//                                    }
-
-                                    Image(
-                                        painter = painterResource(recipe.image),
-                                        contentDescription = null,
-                                        modifier = Modifier.aspectRatio(1f).align(Alignment.Center)
-                                            .windowInsetsPadding(WindowInsets.systemBars)
-                                            .padding(16.dp).rotate(imageRotation.value.toFloat())
-                                            .background(
-                                                Color.Transparent,
-                                                CircleShape,
-                                            ).sharedBounds(
-                                                rememberSharedContentState(key = "item-image-${recipe.id}"),
-                                                animatedVisibilityScope = animatedVisibilityScope,
-                                                enter = fadeIn(),
-                                                exit = fadeOut(),
-                                                resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
-                                            )
-                                    )
-                                }
+                                Image(
+                                    painter = painterResource(recipe.image),
+                                    contentDescription = null,
+                                    modifier = Modifier.aspectRatio(1f).align(Alignment.Center)
+                                        .windowInsetsPadding(WindowInsets.systemBars)
+                                        .padding(16.dp).rotate(imageRotation.value.toFloat())
+                                        .background(
+                                            Color.Transparent,
+                                            CircleShape,
+                                        ).sharedBounds(
+                                            rememberSharedContentState(key = "item-image-${recipe.id}"),
+                                            animatedVisibilityScope = animatedVisibilityScope,
+                                            enter = fadeIn(),
+                                            exit = fadeOut()
+                                        )
+                                )
                             }
                         }
                     }
@@ -240,15 +206,13 @@ fun RecipeDetailsSmall(
             }
 
             Box(modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars).size(50.dp)
-                .padding(10.dp).alpha(
-                    alpha = if (fraction <= 0) 1f else 0f,
-                ).background(
+                .padding(10.dp).background(
                     color = Color.Black, shape = RoundedCornerShape(50)
                 ).shadow(elevation = 16.dp).padding(5.dp).clickable {
                     goBack()
                 }) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null,
                     tint = recipe.bgColor,
                     modifier = Modifier.size(30.dp)
