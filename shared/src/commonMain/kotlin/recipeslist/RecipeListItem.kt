@@ -53,6 +53,7 @@ fun RecipeListItem(
                 onClick(recipe)
             }) {
             with(sharedTransitionScope) {
+                sharedTransitionScope.isTransitionActive
                 Card(
                     backgroundColor = recipe.bgColor,
                     shape = RoundedCornerShape(35.dp),
