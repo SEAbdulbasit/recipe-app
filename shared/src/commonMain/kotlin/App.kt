@@ -4,8 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,7 +27,9 @@ fun App(sensorManager: SensorManager?, isLarge: Boolean = false) {
 
     MaterialTheme(typography = getTypography(fontFamily)) {
         val items by remember { mutableStateOf(recipesList) }
-        var currentRecipe = items.first()
+        var recipeId by rememberSaveable { mutableIntStateOf(items.first().id) }
+
+        val currentRecipe = items.first { it.id == recipeId }
 
         SharedTransitionLayout {
             val sharedTransitionScope = this
@@ -39,7 +44,7 @@ fun App(sensorManager: SensorManager?, isLarge: Boolean = false) {
                         isLarge = isLarge,
                         items = items,
                         onClick = { recipe ->
-                            currentRecipe = recipe
+                            recipeId = recipe.id
                             navController.navigate(RecipeAppScreen.Details.name)
                         })
                 }
